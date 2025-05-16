@@ -59,6 +59,14 @@ public class AuthController {
 //        return ApiResponse.onSuccess(SuccessStatus.LOGOUT_SUCCESS);
 //    }
 
+//    @PostMapping("/reissue")
+//    public ResponseEntity<?> reissueToken(HttpServletRequest request) {
+//
+//        String accessToken = authService.reissueToken(request);
+//
+//        return new ResponseEntity<>(accessToken, HttpStatus.OK);
+//    }
+
     @GetMapping("/testLogin")
     public ResponseEntity<TestLoginDto> testLogin(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
