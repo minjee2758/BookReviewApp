@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if(token == null) {
             throw new IllegalArgumentException("토큰 없음");
         }
-        if(jwtUtil.validateToken(token)) {
+        if(!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("유효하지 않은 토큰");
         }
 //        if(tokenService.isBlacklisted(token)) {

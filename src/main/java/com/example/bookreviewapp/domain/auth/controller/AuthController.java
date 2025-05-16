@@ -2,19 +2,21 @@ package com.example.bookreviewapp.domain.auth.controller;
 
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
+import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.auth.dto.LoginRequestDto;
 import com.example.bookreviewapp.domain.auth.dto.SignUpRequestDto;
+import com.example.bookreviewapp.domain.auth.dto.TestLoginDto;
 import com.example.bookreviewapp.domain.auth.dto.TokenDto;
 import com.example.bookreviewapp.domain.auth.service.AuthService;
+import com.example.bookreviewapp.domain.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -48,5 +50,22 @@ public class AuthController {
 //        response.addHeader("Set-Cookie", refreshCookie.toString());
 
         return ApiResponse.onSuccess(SuccessStatus.LOGIN_SUCCESS, tokenDto.getAccessToken());
+    }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+//        authService.logout(request, userDetails.getId());
+//
+//        return ApiResponse.onSuccess(SuccessStatus.LOGOUT_SUCCESS);
+//    }
+
+    @GetMapping("/testLogin")
+    public ResponseEntity<TestLoginDto> testLogin(@AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        User user = authService.testLogin(userDetails.getId());
+
+        TestLoginDto response = new TestLoginDto(user.getEmail(), user.getUserRole());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -1,10 +1,12 @@
 package com.example.bookreviewapp.domain.auth.service;
 
 import com.example.bookreviewapp.common.jwt.JwtUtil;
+import com.example.bookreviewapp.common.jwt.TokenService;
 import com.example.bookreviewapp.domain.auth.dto.TokenDto;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.entity.UserRole;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     private final JwtUtil jwtUtil;
+
+    private final TokenService tokenService;
 
     public void signUp(String email, String password, UserRole userRole) {
         String encodePassword = passwordEncoder.encode(password);
@@ -44,6 +48,18 @@ public class AuthService {
         TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
 
         return tokenDto;
+    }
+
+//    public void logout(HttpServletRequest request, long userId) {
+//        tokenService.blacklistAccessToken(jwtUtil.resolveAccessToken(request));
+//        tokenService.deleteRefreshToken(userId);
+//    }
+
+    public User testLogin(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 정보"));
+
+        return user;
     }
 
 }
