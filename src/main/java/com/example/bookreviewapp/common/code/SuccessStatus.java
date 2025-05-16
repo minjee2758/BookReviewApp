@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SuccessStatus implements BaseCode {
 	// 1000: 성공 코드
-	SIGNUP_SUCCESS(HttpStatus.CREATED, "1001", "회원가입이 완료되었습니다.")
+	SIGNUP_SUCCESS(HttpStatus.CREATED, "1001", "회원가입이 완료되었습니다."),
+	LOGIN_SUCCESS(HttpStatus.OK, "1002", "로그인 성공")
 	;
 
 	private final HttpStatus httpStatus;
