@@ -29,5 +29,10 @@ public class UserController {
         userService.update(userDetails.getId(), request, httpRequest);
         return ApiResponse.onSuccess(SuccessStatus.UPDATEINFO_SUCCESS);
     }
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> delete(@AuthenticationPrincipal CustomUserDetails userDetails, HttpServletRequest httpRequest) {
+        userService.delete(userDetails.getId(), httpRequest);
+        return ApiResponse.onSuccess(SuccessStatus.DELETE_SUCCESS);
+    }
 
 }

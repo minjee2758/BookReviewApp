@@ -66,14 +66,4 @@ public class AuthController {
 //
 //        return new ResponseEntity<>(accessToken, HttpStatus.OK);
 //    }
-
-    @GetMapping("/testLogin")
-    public ResponseEntity<TestLoginDto> testLogin(@AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        User user = authService.testLogin(userDetails.getId());
-
-        TestLoginDto response = new TestLoginDto(user.getEmail(), user.getUserRole());
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }

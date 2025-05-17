@@ -40,4 +40,14 @@ public class UserService {
 
         authService.logout(httpRequest, userId);
     }
+
+    @Transactional
+    public void delete(Long userId, HttpServletRequest httpRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 정보"));
+
+        user.deactivate();
+
+        authService.logout(httpRequest, userId);
+    }
 }
