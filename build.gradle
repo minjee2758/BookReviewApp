@@ -42,6 +42,17 @@ dependencies {
 
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // bcrypt
+    implementation 'at.favre.lib:bcrypt:0.10.2'
+
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
