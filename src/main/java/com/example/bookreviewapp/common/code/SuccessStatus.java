@@ -15,8 +15,9 @@ public enum SuccessStatus implements BaseCode {
 
 	// 2000: 도서 성공 코드
 	FIND_BOOK(HttpStatus.OK, "2000", "도서 조회 성공."),
-	CREATE_BOOK(HttpStatus.CREATED, "2001", "도서 생성이 완료되었습니다."),
-	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공.")
+	CREATE_BOOK(HttpStatus.CREATED, "2001", "도서 생성 성공."),
+	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
+	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공.")
 	;
 
 	private final HttpStatus httpStatus;

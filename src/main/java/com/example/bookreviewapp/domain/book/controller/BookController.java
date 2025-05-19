@@ -49,4 +49,12 @@ public class BookController {
 
         return ApiResponse.onSuccess(SuccessStatus.UPDATE_BOOK, responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<BookResponseDto>> deleteBook(@PathVariable Long id) {
+
+        bookService.deleteBook(id);
+
+        return ApiResponse.onSuccess(SuccessStatus.DELETE_BOOK);
+    }
 }

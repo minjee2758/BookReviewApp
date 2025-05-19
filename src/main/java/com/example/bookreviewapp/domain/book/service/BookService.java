@@ -48,13 +48,13 @@ public class BookService {
     @Transactional
     public BookResponseDto editBook(Long id, String title, String author, String category) {
 
-        // 도서 조회
-        Book book = bookRepository.findById(id)
+        // 등록된 도서 id 조회
+        Book findBook = bookRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
-        book.update(title, author, category);
+        findBook.update(title, author, category);
 
-        Book updatedBook = bookRepository.save(book);
+        Book updatedBook = bookRepository.save(findBook);
 
         return new BookResponseDto(
                 updatedBook.getId(),
@@ -65,5 +65,14 @@ public class BookService {
                 updatedBook.getUpdatedAt(),
                 updatedBook.getEnrollStatus()
         );
+    }
+
+    @Transactional
+    public void deleteBook(Long id) {
+
+        // 등록된 도서 id 조회
+        Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
+
+        bookRepository.delete(findBook);
     }
 }
