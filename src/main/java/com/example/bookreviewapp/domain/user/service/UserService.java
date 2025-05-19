@@ -38,7 +38,7 @@ public class UserService {
             user.changePassword(passwordEncoder.encode(request.getNewPassword()));
         }
 
-        authService.logout(httpRequest, userId);
+//        authService.logout(httpRequest, userId);
     }
 
     @Transactional
@@ -48,6 +48,6 @@ public class UserService {
 
         user.deactivate();
 
-        authService.logout(httpRequest, userId);
+//        authService.logout(httpRequest, userId);
     }
 }

@@ -17,6 +17,14 @@ public enum SuccessStatus implements BaseCode {
 	GETMYINFO_SUCCESS(HttpStatus.OK, "1004", "내 정보 불러오기 성공"),
 	UPDATEINFO_SUCCESS(HttpStatus.OK, "1005", "업데이트 성공, 다시 로그인 해주세요."),
 	DELETE_SUCCESS(HttpStatus.OK, "1006", "회원 탈퇴 성공, 다시 로그인 해주세요."),
+
+	// 2000: 도서 성공 코드
+	FIND_BOOK(HttpStatus.OK, "2000", "도서 조회 성공."),
+	CREATE_BOOK(HttpStatus.CREATED, "2001", "도서 생성 성공."),
+	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
+	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공."),
+
+
 	BOOK_ADD_ACCEPT_SUCCESS(HttpStatus.OK, "4001", "도서 추가 요청 승인 성공"),
 	REVIEW_PIN_SUCCESS(HttpStatus.OK, "4002", "리뷰 상단 고정 성공"),
 	REVIEW_UNPIN_SUCCESS(HttpStatus.OK, "4003", "리뷰 상단 고정 해제 성공")
