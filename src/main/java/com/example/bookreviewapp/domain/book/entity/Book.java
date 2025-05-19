@@ -4,10 +4,12 @@ import com.example.bookreviewapp.common.entity.BaseEntity;
 import com.example.bookreviewapp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name= "book")
+@NoArgsConstructor
 public class Book extends BaseEntity {
 
     @Id
@@ -15,7 +17,7 @@ public class Book extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User user_id;
 
     @Column(nullable = false)
@@ -31,5 +33,9 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private EnrollStatus enrollStatus = EnrollStatus.REJECT;
 
-
+    public Book(String title, String author, String category) {
+        this.title = title;
+        this.author = author;
+        this.category = category;
+    }
 }
