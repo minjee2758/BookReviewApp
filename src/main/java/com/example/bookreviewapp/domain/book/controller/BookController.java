@@ -1,0 +1,41 @@
+package com.example.bookreviewapp.domain.book.controller;
+
+import com.example.bookreviewapp.common.code.SuccessStatus;
+import com.example.bookreviewapp.common.response.ApiResponse;
+import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
+import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
+import com.example.bookreviewapp.domain.book.service.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<BookResponseDto>> createBook(@RequestBody CreateBookRequestDto requestDto) {
+
+        BookResponseDto responseDto = bookService.createBook(requestDto.getTitle(), requestDto.getAuthor(), requestDto.getCategory());
+
+        return ApiResponse.onSuccess(SuccessStatus.CREATE_BOOK, responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> findAllBooks(
+            @PageableDefault(direction = Sort.Direction.DESC, sort = "createdAt") Pageable pageable
+    ) {
+
+        Page<BookResponseDto> responseDto = bookService.findAllBooks(pageable);
+
+        return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
+    }
+
+}
