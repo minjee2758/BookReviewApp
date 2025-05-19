@@ -16,8 +16,8 @@ public class Book extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
@@ -34,6 +34,13 @@ public class Book extends BaseEntity {
     private EnrollStatus enrollStatus = EnrollStatus.REJECT;
 
     public Book(String title, String author, String category) {
+        this.title = title;
+        this.author = author;
+        this.category = category;
+    }
+
+    // 수정 메소드
+    public void update(String title, String author, String category) {
         this.title = title;
         this.author = author;
         this.category = category;
