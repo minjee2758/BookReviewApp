@@ -3,6 +3,7 @@ package com.example.bookreviewapp.domain.book.controller;
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
+import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -38,4 +39,22 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<BookResponseDto>> editBook(
+            @PathVariable Long id,
+            @RequestBody UpdateBookRequestDto requestDto
+    ) {
+
+        BookResponseDto responseDto = bookService.editBook(id, requestDto.getTitle(), requestDto.getAuthor(), requestDto.getCategory());
+
+        return ApiResponse.onSuccess(SuccessStatus.UPDATE_BOOK, responseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<BookResponseDto>> deleteBook(@PathVariable Long id) {
+
+        bookService.deleteBook(id);
+
+        return ApiResponse.onSuccess(SuccessStatus.DELETE_BOOK);
+    }
 }
