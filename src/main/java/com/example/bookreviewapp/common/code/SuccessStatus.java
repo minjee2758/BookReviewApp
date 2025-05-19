@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum SuccessStatus implements BaseCode {
 	// 1000: 성공 코드
 	SIGNUP_SUCCESS(HttpStatus.CREATED, "1001", "회원가입이 완료되었습니다."),
-  	LOGIN_SUCCESS(HttpStatus.OK, "1002", "로그인 성공"),
+	LOGIN_SUCCESS(HttpStatus.OK, "1002", "로그인 성공"),
 	LOGOUT_SUCCESS(HttpStatus.OK, "1003", "로그아웃 성공"),
 	GETMYINFO_SUCCESS(HttpStatus.OK, "1004", "내 정보 불러오기 성공"),
 	UPDATEINFO_SUCCESS(HttpStatus.OK, "1005", "업데이트 성공, 다시 로그인 해주세요."),
@@ -24,6 +24,10 @@ public enum SuccessStatus implements BaseCode {
 	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
 	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공."),
 
+
+	BOOK_ADD_ACCEPT_SUCCESS(HttpStatus.OK, "4001", "도서 추가 요청 승인 성공"),
+	REVIEW_PIN_SUCCESS(HttpStatus.OK, "4002", "리뷰 상단 고정 성공"),
+	REVIEW_UNPIN_SUCCESS(HttpStatus.OK, "4003", "리뷰 상단 고정 해제 성공")
 	;
 
 	private final HttpStatus httpStatus;
