@@ -2,18 +2,13 @@ package com.example.bookreviewapp.domain.like.controller;
 
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
-import com.example.bookreviewapp.domain.like.dto.LikeInfoDto;
 import com.example.bookreviewapp.domain.like.dto.LikeRequestDto;
 import com.example.bookreviewapp.domain.like.dto.LikeResponseDto;
-import com.example.bookreviewapp.domain.like.entity.Like;
 import com.example.bookreviewapp.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController

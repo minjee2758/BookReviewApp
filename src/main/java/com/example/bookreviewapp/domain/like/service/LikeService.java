@@ -1,9 +1,7 @@
 package com.example.bookreviewapp.domain.like.service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
-import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.error.ApiException;
-import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.like.dto.LikeRequestDto;
@@ -12,7 +10,6 @@ import com.example.bookreviewapp.domain.like.entity.Like;
 import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
-import com.example.bookreviewapp.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
