@@ -1,17 +1,32 @@
 package com.example.bookreviewapp.domain.like.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.bookreviewapp.domain.like.entity.Like;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class LikeResponseDto {
+    private Long userId;
+    private List<LikeInfoDto> likes;
+    private int page;
+    private int size;
+    private int totalLikes;
 
-    private
+    public static LikeResponseDto fromLiketoDto(Like like) {
+        LikeInfoDto likeInfo = new LikeInfoDto(
+                like.getBook().getId(),
+                like.getBook().getTitle(),
+                like.getLikedAt().toLocalTime()
+        );
+        UserLikesDto userLikes = new UserLikesDto(
+                like.getUser().getId(),
+                List.of(likeInfo),
+                1, 1, 1 // 기본값. 페이징 응답이 아닐 경우
+        );
 
-    @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
-    private LocalDateTime createAt;
+        return new LikeResponseDto(userLikes, likeInfo);
+    }
 }

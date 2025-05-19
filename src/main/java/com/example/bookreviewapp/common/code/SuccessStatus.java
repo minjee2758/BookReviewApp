@@ -24,6 +24,11 @@ public enum SuccessStatus implements BaseCode {
 	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
 	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공."),
 
+	//4000 : 좋아요 성공 코드
+	CREATE_LIKE(HttpStatus.CREATED, "4001" , "좋아요 성공"),
+	GETINFO_LIKE(HttpStatus.OK, "4002" , "좋아요 조회 성공"),
+	DELETE_LIKE(HttpStatus.OK, "4003", "좋아요 취소 성공.")
+
 	;
 
 	private final HttpStatus httpStatus;

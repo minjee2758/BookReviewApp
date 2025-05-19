@@ -29,7 +29,12 @@ public class Like {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime likedAt;
 
 
+    public Like(User user, Book book, LocalDateTime now) {
+        this.user = user;
+        this.book = book;
+        this.likedAt = likedAt;
+    }
 }
