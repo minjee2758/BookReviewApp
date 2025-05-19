@@ -6,11 +6,12 @@ import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +26,16 @@ public class BookController {
         BookResponseDto responseDto = bookService.createBook(requestDto.getTitle(), requestDto.getAuthor(), requestDto.getCategory());
 
         return ApiResponse.onSuccess(SuccessStatus.CREATE_BOOK, responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> findAllBooks(
+            @PageableDefault(direction = Sort.Direction.DESC, sort = "createdAt") Pageable pageable
+    ) {
+
+        Page<BookResponseDto> responseDto = bookService.findAllBooks(pageable);
+
+        return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
 
 }

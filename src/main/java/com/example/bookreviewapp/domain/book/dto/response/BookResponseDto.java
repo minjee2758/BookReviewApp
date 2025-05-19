@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.domain.book.dto.response;
 
+import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,17 @@ public class BookResponseDto {
     private final LocalDateTime updatedAt;
 
     private final EnrollStatus enrollStatus;
+
+    // entity -> dto 변환
+    public static BookResponseDto from(Book book) {
+        return new BookResponseDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getCategory(),
+                book.getCreatedAt(),
+                book.getUpdatedAt(),
+                book.getEnrollStatus()
+        );
+    }
 }
