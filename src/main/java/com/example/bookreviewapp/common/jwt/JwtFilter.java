@@ -73,9 +73,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if(!jwtUtil.validateToken(token)) {
             throw new JwtCustomException(ErrorStatus.INVALID_TOKEN);
         }
-        if(tokenService.isBlacklisted(token)) {
-              throw new JwtCustomException(ErrorStatus.TOKEN_BLACKLISTED);
-        }
+//        if(tokenService.isBlacklisted(token)) {
+//              throw new JwtCustomException(ErrorStatus.TOKEN_BLACKLISTED);
+//        }
         return true;
     }
 

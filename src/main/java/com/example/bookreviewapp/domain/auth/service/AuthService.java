@@ -56,10 +56,10 @@ public class AuthService {
         return tokenDto;
     }
 
-    public void logout(HttpServletRequest request, long userId) {
-        tokenService.blacklistAccessToken(jwtUtil.resolveAccessToken(request));
-        tokenService.deleteRefreshToken(userId);
-    }
+//    public void logout(HttpServletRequest request, long userId) {
+//        tokenService.blacklistAccessToken(jwtUtil.resolveAccessToken(request));
+//        tokenService.deleteRefreshToken(userId);
+//    }
 
 //    public String reissueToken(HttpServletRequest request) {
 //        String refreshToken = extractTokenFromCookie(request, "refreshToken");
