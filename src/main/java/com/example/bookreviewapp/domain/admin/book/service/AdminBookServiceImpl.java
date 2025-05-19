@@ -7,9 +7,7 @@ import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.admin.book.dto.AdminBookResponseDto;
 import com.example.bookreviewapp.domain.admin.book.repository.AdminBookRepository;
 import com.example.bookreviewapp.domain.book.entity.Book;
-import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
