@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public void postReview(CustomUserDetails userDetails, Long bookId, ReviewResquestDto dto) {
 		Book book = bookRepository.findById(bookId).orElseThrow(
-			() -> new ApiException(ErrorStatus.BOOK_NOT_FOND));
+			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
 		User user = userRepository.findById(userDetails.getId())
 			.orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
@@ -44,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public void updateReview(CustomUserDetails userDetails, Long bookId, Long reviewId, ReviewResquestDto dto) {
 		if (!bookRepository.existsById(bookId)) {
-			throw new ApiException(ErrorStatus.BOOK_NOT_FOND);
+			throw new ApiException(ErrorStatus.BOOK_NOT_FOUND);
 		}
 
 		Review review = reviewRepository.findById(reviewId).orElseThrow(
@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public void deleteReview(CustomUserDetails userDetails, Long bookId, Long reviewId) {
 		if (!bookRepository.existsById(bookId)) {
-			throw new ApiException(ErrorStatus.BOOK_NOT_FOND);
+			throw new ApiException(ErrorStatus.BOOK_NOT_FOUND);
 		}
 		if (!reviewRepository.existsById(reviewId)) {
 			throw new ApiException(ErrorStatus.REVIEW_NOT_FOUND);

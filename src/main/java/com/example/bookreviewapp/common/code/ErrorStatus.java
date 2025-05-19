@@ -15,7 +15,6 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	//book 에러 코드
 	BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "2100", "도서 정보를 찾을수 없습니다."),
-	//review 에러코드
 
 	// 3000 : review 에러코드
 	REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "3001", "해당 리뷰를 찾을 수 없습니다"),
