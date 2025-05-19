@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.common.security;
 
+import com.example.bookreviewapp.common.code.ErrorStatus;
+import com.example.bookreviewapp.common.jwt.JwtCustomException;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import lombok.Getter;
@@ -19,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 이메일이 없음"));
+                .orElseThrow(() -> new JwtCustomException(ErrorStatus.USER_NOT_FOUND));
 
         return new CustomUserDetails(user.getId(), user.getEmail(), user.getUserRole());
     }

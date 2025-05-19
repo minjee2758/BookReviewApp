@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.common.jwt;
 
+import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -84,7 +85,7 @@ public class JwtUtil {
     public String resolveAccessToken(HttpServletRequest request) { // 토큰 추출 from Header 메서드
         String bearerJwt = request.getHeader("Authorization");
         if (bearerJwt == null || !bearerJwt.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("토큰 없음");
+            throw new JwtCustomException(ErrorStatus.TOKEN_NOT_FOUND);
         }
         String token = bearerJwt.substring(7);
         return token;
