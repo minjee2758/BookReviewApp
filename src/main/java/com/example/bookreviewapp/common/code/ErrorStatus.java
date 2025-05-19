@@ -15,6 +15,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	//review 에러코드
 
+
+
 	//admin 에러코드
 	BOOK_ADD_REQUEST_ALREADY_ACCEPT(HttpStatus.BAD_REQUEST,"4001","이미 승인된 요청입니다."),
 	REVIEW_ALREADY_PINNED(HttpStatus.BAD_REQUEST,"4002","이미 고정된 리뷰입니다."),
