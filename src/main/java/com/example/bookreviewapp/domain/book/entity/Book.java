@@ -2,54 +2,52 @@ package com.example.bookreviewapp.domain.book.entity;
 
 import com.example.bookreviewapp.common.entity.BaseEntity;
 import com.example.bookreviewapp.domain.user.entity.User;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "book")
+@Table(name= "book")
 @NoArgsConstructor
 public class Book extends BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
-	@ManyToOne
-	@JoinColumn
-	private User user;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false)
-	private String title;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@Column(nullable = false)
-	private String author;
+    @Column(nullable = false)
+    private String title;
 
-	@Column(nullable = false)
-	private String category;
+    @Column(nullable = false)
+    private String author;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private EnrollStatus enrollStatus = EnrollStatus.REJECT;
+    @Column(nullable = false)
+    private String category;
 
-	public Book(String title, String author, String category) {
-		this.title = title;
-		this.author = author;
-		this.category = category;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EnrollStatus enrollStatus = EnrollStatus.REJECT;
 
-	// 승인 메소드
-	public void acceptEnroll() {
-		this.enrollStatus = EnrollStatus.ACCEPT;
-	}
+    public Book(String title, String author, String category) {
+        this.title = title;
+        this.author = author;
+        this.category = category;
+    }
+
+    // 수정 메소드
+    public void update(String title, String author, String category) {
+        this.title = title;
+        this.author = author;
+        this.category = category;
+    }
+
+    // 승인 메소드
+    public void acceptEnroll() {
+        this.enrollStatus = EnrollStatus.ACCEPT;
+    }
 }
