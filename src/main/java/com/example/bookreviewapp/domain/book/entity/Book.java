@@ -38,4 +38,9 @@ public class Book extends BaseEntity {
         this.author = author;
         this.category = category;
     }
+
+    // 승인 메소드
+    public void acceptEnroll() {
+        this.enrollStatus = EnrollStatus.ACCEPT;
+    }
 }
