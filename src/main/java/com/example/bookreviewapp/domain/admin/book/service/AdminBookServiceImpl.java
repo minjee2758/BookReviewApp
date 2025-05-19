@@ -1,11 +1,7 @@
 package com.example.bookreviewapp.domain.admin.book.service;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.example.bookreviewapp.common.code.BaseErrorCode;
 import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.admin.book.dto.AdminBookResponseDto;
@@ -25,7 +21,7 @@ public class AdminBookServiceImpl implements AdminBookService {
 	@Override
 	public AdminBookResponseDto approve(Long bookId) {
 		Book book = adminBookRepository.findById(bookId)
-			.orElseThrow(() -> new EntityNotFoundException("Book not found"));
+			.orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 		if (book.getEnrollStatus() == EnrollStatus.ACCEPT) {
 			throw new ApiException(ErrorStatus.BOOK_ADD_REQUEST_ALREADY_ACCEPT);
 		}
