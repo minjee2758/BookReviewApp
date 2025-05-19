@@ -5,6 +5,7 @@ import com.example.bookreviewapp.common.jwt.TokenService;
 import com.example.bookreviewapp.domain.auth.dto.TokenDto;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.entity.UserRole;
+import com.example.bookreviewapp.domain.user.entity.UserStatus;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,10 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("이메일이 없음"));
 
+        if(user.getUserStatus() != UserStatus.ACTIVE) {
+            throw new IllegalArgumentException("비활성화된 계정");
+        }
+
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호");
         }
@@ -51,10 +56,10 @@ public class AuthService {
         return tokenDto;
     }
 
-//    public void logout(HttpServletRequest request, long userId) {
-//        tokenService.blacklistAccessToken(jwtUtil.resolveAccessToken(request));
-//        tokenService.deleteRefreshToken(userId);
-//    }
+    public void logout(HttpServletRequest request, long userId) {
+        tokenService.blacklistAccessToken(jwtUtil.resolveAccessToken(request));
+        tokenService.deleteRefreshToken(userId);
+    }
 
 //    public String reissueToken(HttpServletRequest request) {
 //        String refreshToken = extractTokenFromCookie(request, "refreshToken");
@@ -80,13 +85,6 @@ public class AuthService {
 //
 //        return newAccessToken;
 //    }
-
-    public User testLogin(long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 정보"));
-
-        return user;
-    }
 
     private String extractTokenFromCookie(HttpServletRequest request, String name) {
         if(request.getCookies() == null) return null;

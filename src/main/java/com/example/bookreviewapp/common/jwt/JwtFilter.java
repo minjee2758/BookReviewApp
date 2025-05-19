@@ -69,9 +69,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if(!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("유효하지 않은 토큰");
         }
-//        if(tokenService.isBlacklisted(token)) {
-//              throw new IllegalArgumentException("블랙리스트 등록 토큰");
-//        }
+        if(tokenService.isBlacklisted(token)) {
+              throw new IllegalArgumentException("블랙리스트 등록 토큰");
+        }
         return true;
     }
 

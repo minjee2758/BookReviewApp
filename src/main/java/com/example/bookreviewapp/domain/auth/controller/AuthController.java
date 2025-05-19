@@ -52,12 +52,12 @@ public class AuthController {
         return ApiResponse.onSuccess(SuccessStatus.LOGIN_SUCCESS, tokenDto.getAccessToken());
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
-//        authService.logout(request, userDetails.getId());
-//
-//        return ApiResponse.onSuccess(SuccessStatus.LOGOUT_SUCCESS);
-//    }
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        authService.logout(request, userDetails.getId());
+
+        return ApiResponse.onSuccess(SuccessStatus.LOGOUT_SUCCESS);
+    }
 
 //    @PostMapping("/reissue")
 //    public ResponseEntity<?> reissueToken(HttpServletRequest request) {
@@ -66,14 +66,4 @@ public class AuthController {
 //
 //        return new ResponseEntity<>(accessToken, HttpStatus.OK);
 //    }
-
-    @GetMapping("/testLogin")
-    public ResponseEntity<TestLoginDto> testLogin(@AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        User user = authService.testLogin(userDetails.getId());
-
-        TestLoginDto response = new TestLoginDto(user.getEmail(), user.getUserRole());
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }

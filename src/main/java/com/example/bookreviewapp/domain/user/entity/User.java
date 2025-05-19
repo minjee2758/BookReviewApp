@@ -28,10 +28,14 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
     public User(String email, String password, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.userRole = userRole;
+        this.userStatus = userStatus.ACTIVE;
     }
 
     public void changeEmail(String newEmail) {
@@ -39,6 +43,10 @@ public class User extends BaseEntity {
     }
 
     public void changePassword(String newPassword) {
-        this.email = newPassword;
+        this.password = newPassword;
+    }
+
+    public void deactivate() {
+        this.userStatus = userStatus.DEACTIVATE;
     }
 }
