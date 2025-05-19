@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(name="user")
+
 @NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @Column(unique = true)
     private String email;
