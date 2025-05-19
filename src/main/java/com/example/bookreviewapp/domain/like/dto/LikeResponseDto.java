@@ -4,29 +4,22 @@ import com.example.bookreviewapp.domain.like.entity.Like;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class LikeResponseDto {
-    private Long userId;
-    private List<LikeInfoDto> likes;
-    private int page;
-    private int size;
-    private int totalLikes;
+    private Long bookId;
+    private String title;
+    private LocalTime likedAt;
 
     public static LikeResponseDto fromLiketoDto(Like like) {
-        LikeInfoDto likeInfo = new LikeInfoDto(
+        return new LikeResponseDto(
                 like.getBook().getId(),
                 like.getBook().getTitle(),
                 like.getLikedAt().toLocalTime()
         );
-        UserLikesDto userLikes = new UserLikesDto(
-                like.getUser().getId(),
-                List.of(likeInfo),
-                1, 1, 1 // 기본값. 페이징 응답이 아닐 경우
-        );
-
-        return new LikeResponseDto(userLikes, likeInfo);
     }
 }
+

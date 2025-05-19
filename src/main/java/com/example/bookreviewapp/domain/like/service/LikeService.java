@@ -33,7 +33,7 @@ public class LikeService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    public LikeResponseDto saveLike(Long userId ,LikeRequestDto requestDto){
+    public void saveLike(Long userId ,LikeRequestDto requestDto){
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
@@ -43,15 +43,16 @@ public class LikeService {
 
 
         Like like = new Like(user, book, LocalDateTime.now());
-        Like saved = likeRepository.save(like);
+        likeRepository.save(like);
 
-        return LikeResponseDto.fromLiketoDto(saved);
     }
 
     public Page<LikeResponseDto> getAllLists(Long userId, int page, int size) {
+
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").ascending());
         Page<Like> likePage = likeRepository.findAllByUserId(userId, pageable);
         return likePage.map(LikeResponseDto::fromLiketoDto);
+
     }
 
 
