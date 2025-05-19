@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.common.jwt;
 
+import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.security.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -62,16 +63,19 @@ public class JwtFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
+    /*
+    * 토큰 유효성 검사
+    * 1. jwtUtil.resolveAccessToken(request) -> token 이 없는 경우
+    * 2. isValidToken(String token) -> token 이 유효하지 않을경우(기간 만료)
+    * 3. isValidToken(String token) -> token 이 블랙리스트 처리 되었을 경우
+    */
     private boolean isValidToken(String token) {
-        if(token == null) {
-            throw new IllegalArgumentException("토큰 없음");
-        }
         if(!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰");
+            throw new JwtCustomException(ErrorStatus.INVALID_TOKEN);
         }
-        if(tokenService.isBlacklisted(token)) {
-              throw new IllegalArgumentException("블랙리스트 등록 토큰");
-        }
+//        if(tokenService.isBlacklisted(token)) {
+//              throw new JwtCustomException(ErrorStatus.TOKEN_BLACKLISTED);
+//        }
         return true;
     }
 

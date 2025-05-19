@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.common.config;
 
+import com.example.bookreviewapp.common.jwt.JwtExceptionFilter;
 import com.example.bookreviewapp.common.jwt.JwtFilter;
 import com.example.bookreviewapp.common.jwt.JwtUtil;
 import com.example.bookreviewapp.common.jwt.TokenService;
@@ -30,6 +31,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         JwtFilter jwtFilter = new JwtFilter(jwtUtil, tokenService, customUserDetailsService);
 
+        JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
+
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -38,6 +41,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
                 .build();
     }
 
