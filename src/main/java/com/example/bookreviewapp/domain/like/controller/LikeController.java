@@ -18,16 +18,17 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/{userId}/likes")
+    @PostMapping("/likes")
     public ResponseEntity<ApiResponse<Void>> saveLike(
             @PathVariable Long userId,
             @RequestBody LikeRequestDto requestDto
     ) {
+
         likeService.saveLike(userId,requestDto);
         return ApiResponse.onSuccess(SuccessStatus.CREATE_LIKE);
     }
 
-    @GetMapping("/{userId}/likes")
+    @GetMapping("/likes")
     public ResponseEntity<ApiResponse<Page<LikeResponseDto>>> getUserLikes(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "1") int page,
@@ -37,7 +38,7 @@ public class LikeController {
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, response);
     }
 
-    @DeleteMapping("/{userId}/likes")
+    @DeleteMapping("/likes")
     public ResponseEntity<ApiResponse<Void>> deleteLike(
             @PathVariable Long userId,
             @RequestBody LikeRequestDto requestDto
