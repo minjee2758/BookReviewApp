@@ -2,6 +2,7 @@ package com.example.bookreviewapp.domain.book.controller;
 
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
+import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +24,12 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BookResponseDto>> createBook(@RequestBody CreateBookRequestDto requestDto) {
+    public ResponseEntity<ApiResponse<BookResponseDto>> createBook(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody CreateBookRequestDto requestDto
+    ) {
 
-        BookResponseDto responseDto = bookService.createBook(requestDto.getTitle(), requestDto.getAuthor(), requestDto.getCategory());
+        BookResponseDto responseDto = bookService.createBook(customUserDetails.getId(), requestDto.getTitle(), requestDto.getAuthor(), requestDto.getCategory());
 
         return ApiResponse.onSuccess(SuccessStatus.CREATE_BOOK, responseDto);
     }
@@ -51,7 +56,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookResponseDto>> deleteBook(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteBook(@PathVariable Long id) {
 
         bookService.deleteBook(id);
 

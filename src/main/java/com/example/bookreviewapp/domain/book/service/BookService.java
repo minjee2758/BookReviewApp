@@ -2,28 +2,33 @@ package com.example.bookreviewapp.domain.book.service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
-import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
+import com.example.bookreviewapp.domain.user.entity.User;
+import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
 
+    private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    
 
     @Transactional
-    public BookResponseDto createBook(String title, String author, String category) {
+    public BookResponseDto createBook(Long userId, String title, String author, String category) {
 
-        Book newBook = new Book(title, author, category);
+        // 유저 정보 포함하여 도서 정보 등록
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
+
+        Book newBook = new Book(findUser, title, author, category);
 
         Book savedBook = bookRepository.save(newBook);
 
