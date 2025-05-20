@@ -1,7 +1,7 @@
 package com.example.bookreviewapp.domain.review.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
@@ -59,10 +59,18 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	//리뷰 조회
-	@Override
-	public List<ReviewResponseDto> getReviews(Long bookId) {
-		List<ReviewResponseDto> reviewList = reviewRepository.getReviews(bookId);
-		return null;
+	public Page<ReviewResponseDto> getReviews(String userName, Long bookId, Pageable pageable) {
+		Page<Review> reviewPage = reviewRepository.findByBookId(bookId, pageable);
+
+		// DTO로 변환
+		return reviewPage.map(review ->
+			new ReviewResponseDto(
+				review.getBook().getTitle(),
+				userName,
+				review.getContent(),
+				review.getScore()
+			)
+		);
 	}
 
 	//리뷰 삭제

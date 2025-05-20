@@ -24,12 +24,11 @@ public enum SuccessStatus implements BaseCode {
 	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
 	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공."),
 
-	// 3000 : 리뷰 성공 코드
-	CREATE_REVIEW(HttpStatus.CREATED, "3001", "리뷰 등록이 완료되었습니다."),
-	MODIFY_REVIEW_SUCCESS(HttpStatus.OK, "3002", "리뷰 수정이 완료되었습니다."),
-	GET_REVIEWS_SUCCESS(HttpStatus.OK, "3003", "리뷰 조회가 완료되었습니다."),
-	REVIEW_DELETE_SUCCESS(HttpStatus.OK, "1006", "회원 탈퇴 성공, 다시 로그인 해주세요."),
-
+	// 5000 : 리뷰 성공 코드
+	CREATE_REVIEW(HttpStatus.CREATED, "5001", "리뷰 등록이 완료되었습니다."),
+	MODIFY_REVIEW_SUCCESS(HttpStatus.OK, "5002", "리뷰 수정이 완료되었습니다."),
+	GET_REVIEWS_SUCCESS(HttpStatus.OK, "5003", "리뷰 조회가 완료되었습니다."),
+	REVIEW_DELETE_SUCCESS(HttpStatus.OK, "5006", "리뷰 삭제 성공, 다시 로그인 해주세요."),
 
 	;
 

@@ -1,7 +1,7 @@
 package com.example.bookreviewapp.domain.review.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.bookreviewapp.common.security.CustomUserDetails;
@@ -16,7 +16,7 @@ public interface ReviewService {
 
 	void updateReview(CustomUserDetails userDetails, Long bookId, Long reviewId, @Valid ReviewResquestDto dto);
 
-	List<ReviewResponseDto> getReviews(Long bookId);
+	Page<ReviewResponseDto> getReviews(String userName, Long bookId, Pageable pageable);
 
 	void deleteReview(CustomUserDetails userDetails, Long bookId, Long reviewId);
 }

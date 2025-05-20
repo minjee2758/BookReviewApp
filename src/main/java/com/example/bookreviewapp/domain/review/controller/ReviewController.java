@@ -1,7 +1,9 @@
 package com.example.bookreviewapp.domain.review.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,10 +58,12 @@ public class ReviewController {
 
 	//리뷰 조회
 	@GetMapping("/{bookId}/review")
-	public ResponseEntity<ApiResponse<List<ReviewResponseDto>>> getReviews(
-		@PathVariable Long bookId
+	public ResponseEntity<ApiResponse<Page<ReviewResponseDto>>> getReviews(
+		@AuthenticationPrincipal CustomUserDetails userDetails,
+		@PathVariable Long bookId,
+		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		List<ReviewResponseDto> dto = reviewService.getReviews(bookId);
+		Page<ReviewResponseDto> dto = reviewService.getReviews(userDetails.getUsername(), bookId, pageable);
 		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEWS_SUCCESS, dto);
 	}
 

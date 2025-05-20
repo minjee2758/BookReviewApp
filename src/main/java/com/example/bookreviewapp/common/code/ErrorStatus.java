@@ -15,7 +15,6 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	//book 에러 코드
 	BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "2100", "도서 정보를 찾을수 없습니다."),
-	//review 에러코드
 
 	//jwt 에러코드
 	TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "3101", "토큰이 없습니다."),
