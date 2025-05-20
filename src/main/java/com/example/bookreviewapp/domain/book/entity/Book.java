@@ -33,7 +33,8 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private EnrollStatus enrollStatus = EnrollStatus.REJECT;
 
-    public Book(String title, String author, String category) {
+    public Book(User user, String title, String author, String category) {
+        this.user = user;
         this.title = title;
         this.author = author;
         this.category = category;
