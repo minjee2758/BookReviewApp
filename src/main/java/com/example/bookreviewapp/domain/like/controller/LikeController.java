@@ -37,11 +37,12 @@ public class LikeController {
     @GetMapping("/likes")
     public ResponseEntity<ApiResponse<List<UserLikesResponseDto>>> getUserLikes(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sort,
-            @RequestParam(defaultValue = "DESC") String direction
+            @RequestParam(name = "page",defaultValue = "1") int page,
+            @RequestParam(name = "size",defaultValue = "10") int size,
+            @RequestParam(name = "sort",defaultValue = "likedAt") String sort,
+            @RequestParam(name = "direction",defaultValue = "DESC") String direction
     ) {
+
         Pageable pageable = PageRequest.of(
                 Math.max(0, page - 1),
                 size,
