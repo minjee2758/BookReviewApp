@@ -2,9 +2,12 @@ package com.example.bookreviewapp.domain.book.service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
+import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
+import com.example.bookreviewapp.domain.like.repository.LikeRepository;
+import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +23,8 @@ public class BookService {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
-    
+    private final ReviewRepository reviewRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public BookResponseDto createBook(Long userId, String title, String author, String category) {
@@ -48,6 +52,33 @@ public class BookService {
 
         // books.map(book -> BookResponseDto.from(book)); 와 동일한 표현
         return books.map(BookResponseDto::from);
+    }
+
+    public BookDetailsResponseDto findByDetailsBook(Long id) {
+
+        Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
+
+        // 리뷰 평점
+        Double rating = reviewRepository.averageScore(findBook.getId());
+
+        // 리뷰 수 체크
+        Long reviewCounts = reviewRepository.countByBookId(findBook.getId());
+
+        // 좋아요 수 체크
+        Long likeCounts = likeRepository.countByBookId(findBook.getId());
+
+        return new BookDetailsResponseDto(
+                findBook.getId(),
+                findBook.getTitle(),
+                findBook.getAuthor(),
+                findBook.getCategory(),
+                findBook.getCreatedAt(),
+                findBook.getUpdatedAt(),
+                findBook.getEnrollStatus(),
+                rating == null ? 0.0 : rating,  // null 방지
+                reviewCounts,
+                likeCounts
+        );
     }
 
     @Transactional
@@ -80,4 +111,5 @@ public class BookService {
 
         bookRepository.delete(findBook);
     }
+
 }
