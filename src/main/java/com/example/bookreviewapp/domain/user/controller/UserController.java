@@ -5,7 +5,7 @@ import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.entity.Review;
-import com.example.bookreviewapp.domain.review.service.ReviewServiceImpl;
+import com.example.bookreviewapp.domain.review.service.ReviewService;
 import com.example.bookreviewapp.domain.user.dto.UpdateRequestDto;
 import com.example.bookreviewapp.domain.user.dto.UserMyInfoResponseDto;
 import com.example.bookreviewapp.domain.user.service.UserService;
@@ -27,7 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private final ReviewServiceImpl reviewService;
+    private final ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<UserMyInfoResponseDto>> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {

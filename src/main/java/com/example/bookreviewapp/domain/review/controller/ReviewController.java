@@ -56,14 +56,13 @@ public class ReviewController {
 		return ApiResponse.onSuccess(SuccessStatus.MODIFY_REVIEW_SUCCESS);
 	}
 
-	//리뷰 조회
+	//책에 해당하는 모든 리뷰 조회
 	@GetMapping("/{bookId}/review")
 	public ResponseEntity<ApiResponse<Page<ReviewResponseDto>>> getReviews(
-		@AuthenticationPrincipal CustomUserDetails userDetails,
 		@PathVariable Long bookId,
-		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+		@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		Page<ReviewResponseDto> dto = reviewService.getReviews(userDetails.getUsername(), bookId, pageable);
+		Page<ReviewResponseDto> dto = reviewService.getReviews(bookId, pageable);
 		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEWS_SUCCESS, dto);
 	}
 
