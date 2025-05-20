@@ -23,8 +23,8 @@ public enum SuccessStatus implements BaseCode {
 	CREATE_BOOK(HttpStatus.CREATED, "2001", "도서 생성 성공."),
 	UPDATE_BOOK(HttpStatus.OK, "2002", "도서 수정 성공."),
 	DELETE_BOOK(HttpStatus.OK, "2003", "도서 삭제 성공."),
-
-
+  
+ 
 	//4000 : 좋아요 성공 코드
 	CREATE_LIKE(HttpStatus.CREATED, "4001" , "좋아요 성공"),
 	GETINFO_LIKE(HttpStatus.OK, "4002" , "좋아요 조회 성공"),
@@ -34,7 +34,14 @@ public enum SuccessStatus implements BaseCode {
 
 	BOOK_ADD_ACCEPT_SUCCESS(HttpStatus.OK, "5001", "도서 추가 요청 승인 성공"),
 	REVIEW_PIN_SUCCESS(HttpStatus.OK, "5002", "리뷰 상단 고정 성공"),
-	REVIEW_UNPIN_SUCCESS(HttpStatus.OK, "5003", "리뷰 상단 고정 해제 성공")
+	REVIEW_UNPIN_SUCCESS(HttpStatus.OK, "5003", "리뷰 상단 고정 해제 성공"),
+    
+	// 5000 : 리뷰 성공 코드
+	CREATE_REVIEW(HttpStatus.CREATED, "6001", "리뷰 등록이 완료되었습니다."),
+	MODIFY_REVIEW_SUCCESS(HttpStatus.OK, "6002", "리뷰 수정이 완료되었습니다."),
+	GET_REVIEWS_SUCCESS(HttpStatus.OK, "6003", "리뷰 조회가 완료되었습니다."),
+	REVIEW_DELETE_SUCCESS(HttpStatus.OK, "6006", "리뷰 삭제 성공, 다시 로그인 해주세요."),
+
 
 	;
 
