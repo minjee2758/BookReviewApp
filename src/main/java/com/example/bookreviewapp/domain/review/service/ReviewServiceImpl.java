@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.review.service;
 
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,14 +61,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	//리뷰 조회
-	public Page<ReviewResponseDto> getReviews(String userName, Long bookId, Pageable pageable) {
+	public Page<ReviewResponseDto> getReviews(Long bookId, Pageable pageable) {
 		Page<Review> reviewPage = reviewRepository.findByBookId(bookId, pageable);
 
 		// DTO로 변환
 		return reviewPage.map(review ->
 			new ReviewResponseDto(
 				review.getBook().getTitle(),
-				userName,
+				review.getUser().getEmail(),
 				review.getContent(),
 				review.getScore()
 			)
@@ -82,7 +84,7 @@ public class ReviewServiceImpl implements ReviewService {
 		if (!reviewRepository.existsById(reviewId)) {
 			throw new ApiException(ErrorStatus.REVIEW_NOT_FOUND);
 		}
-		if (reviewRepository.findById(reviewId).get().getUser().getId() != userDetails.getId()) {
+		if (!Objects.equals(reviewRepository.findById(reviewId).get().getUser().getId(), userDetails.getId())) {
 			throw new ApiException(ErrorStatus.USER_NOT_EQUAL);
 		}
 

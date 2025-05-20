@@ -16,7 +16,7 @@ public interface ReviewService {
 
 	void updateReview(CustomUserDetails userDetails, Long bookId, Long reviewId, @Valid ReviewResquestDto dto);
 
-	Page<ReviewResponseDto> getReviews(String userName, Long bookId, Pageable pageable);
+	Page<ReviewResponseDto> getReviews(Long bookId, Pageable pageable);
 
 	void deleteReview(CustomUserDetails userDetails, Long bookId, Long reviewId);
 }

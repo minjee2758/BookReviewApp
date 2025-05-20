@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ReviewResponseDto {
 	private String title;
-	private String userName;
+	private String email;
 	private String content;
 	private Integer score;
 }
