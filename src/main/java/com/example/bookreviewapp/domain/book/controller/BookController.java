@@ -5,6 +5,7 @@ import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
+import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,15 @@ public class BookController {
 
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<BookDetailsResponseDto>> findByDetailsBook(@PathVariable Long id) {
+
+        BookDetailsResponseDto responseDto = bookService.findByDetailsBook(id);
+
+        return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<BookResponseDto>> editBook(

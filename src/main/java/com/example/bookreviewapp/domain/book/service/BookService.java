@@ -2,6 +2,7 @@ package com.example.bookreviewapp.domain.book.service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
+import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
@@ -50,6 +51,23 @@ public class BookService {
         return books.map(BookResponseDto::from);
     }
 
+    public BookDetailsResponseDto findByDetailsBook(Long id) {
+
+        Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
+
+
+        return null;
+//        return new BookDetailsResponseDto(
+//                findBook.getId(),
+//                findBook.getTitle(),
+//                findBook.getAuthor(),
+//                findBook.getCategory(),
+//                findBook.getCreatedAt(),
+//                findBook.getUpdatedAt(),
+//                findBook.getEnrollStatus()
+//        );
+    }
+
     @Transactional
     public BookResponseDto editBook(Long id, String title, String author, String category) {
 
@@ -80,4 +98,5 @@ public class BookService {
 
         bookRepository.delete(findBook);
     }
+
 }
