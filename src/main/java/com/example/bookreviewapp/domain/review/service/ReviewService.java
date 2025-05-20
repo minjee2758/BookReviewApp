@@ -25,13 +25,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ReviewService implements ReviewService {
+public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
 
 	//리뷰 등록
-	@Override
 	public void postReview(CustomUserDetails userDetails, Long bookId, ReviewResquestDto dto) {
 		Book book = bookRepository.findById(bookId).orElseThrow(
 			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
@@ -43,7 +42,6 @@ public class ReviewService implements ReviewService {
 	}
 
 	//리뷰 수정
-	@Override
 	public void updateReview(CustomUserDetails userDetails, Long bookId, Long reviewId, ReviewResquestDto dto) {
 		if (!bookRepository.existsById(bookId)) {
 			throw new ApiException(ErrorStatus.BOOK_NOT_FOUND);
@@ -76,7 +74,6 @@ public class ReviewService implements ReviewService {
 	}
 
 	//리뷰 삭제
-	@Override
 	public void deleteReview(CustomUserDetails userDetails, Long bookId, Long reviewId) {
 		if (!bookRepository.existsById(bookId)) {
 			throw new ApiException(ErrorStatus.BOOK_NOT_FOUND);
