@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.domain.admin.book.service;
 
+import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.bookreviewapp.common.code.ErrorStatus;
