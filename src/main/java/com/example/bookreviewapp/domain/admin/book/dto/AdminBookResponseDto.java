@@ -1,5 +1,6 @@
 package com.example.bookreviewapp.domain.admin.book.dto;
 
+import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
