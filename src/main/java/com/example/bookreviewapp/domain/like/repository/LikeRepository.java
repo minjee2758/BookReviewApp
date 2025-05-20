@@ -16,6 +16,9 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     Optional<Like> findByUserAndBook(User user, Book book);
 
-    //좋아요 중복 확인
+    // 좋아요 중복 확인
     boolean existsByUserAndBook(User user, Book book);
+
+    // 좋아요 수 체크
+    Long countByBookId(Long bookId);
 }

@@ -19,7 +19,9 @@ import lombok.Setter;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "likes")
+
+@Table(name = "`like`")
+
 public class Like {
 
 	@Id
