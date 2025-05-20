@@ -56,7 +56,7 @@ public class ReviewController {
 		return ApiResponse.onSuccess(SuccessStatus.MODIFY_REVIEW_SUCCESS);
 	}
 
-	//리뷰 조회
+	//책에 해당하는 모든 리뷰 조회
 	@GetMapping("/{bookId}/review")
 	public ResponseEntity<ApiResponse<Page<ReviewResponseDto>>> getReviews(
 		@PathVariable Long bookId,
