@@ -2,6 +2,7 @@ package com.example.bookreviewapp.domain.book.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
