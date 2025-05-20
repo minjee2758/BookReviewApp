@@ -41,6 +41,7 @@ public class Review extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PinStatus isPinned = PinStatus.UNPINNED;
 
+
 	//핀 설정
 	public void pinned() {
 		this.isPinned = PinStatus.PINNED;

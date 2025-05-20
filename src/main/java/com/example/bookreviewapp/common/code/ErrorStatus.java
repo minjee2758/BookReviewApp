@@ -16,10 +16,15 @@ public enum ErrorStatus implements BaseErrorCode {
 	//book 에러 코드
 	BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "2100", "도서 정보를 찾을수 없습니다."),
 
+
+	//like 에러 코드
+	LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "좋아요 정보를 찾을수 없습니다."),
+
 	//admin 에러코드
-	BOOK_ADD_REQUEST_ALREADY_ACCEPT(HttpStatus.BAD_REQUEST,"4001","이미 승인된 요청입니다."),
-	REVIEW_ALREADY_PINNED(HttpStatus.BAD_REQUEST,"4002","이미 고정된 리뷰입니다."),
-	REVIEW_ALREADY_UNPINNED(HttpStatus.BAD_REQUEST,"4003","리뷰가 고정되어 있지 않습니다."),
+	BOOK_ADD_REQUEST_ALREADY_ACCEPT(HttpStatus.BAD_REQUEST,"5001","이미 승인된 요청입니다."),
+	REVIEW_ALREADY_PINNED(HttpStatus.BAD_REQUEST,"5002","이미 고정된 리뷰입니다."),
+	REVIEW_ALREADY_UNPINNED(HttpStatus.BAD_REQUEST,"5003","리뷰가 고정되어 있지 않습니다."),
+
 
 	//jwt 에러코드
 	TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "3101", "토큰이 없습니다."),
