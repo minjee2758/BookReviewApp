@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class LikeInfoDto {
-    private Long bookId;
-    private String title;
-
-    @JsonFormat(pattern = "HH:mm:ss")
-    private LocalTime likedAt;
+public class UserLikesResponseDto {
+    private Long userId;
+    private List<LikeResponseDto> likes;
+    private int page;
+    private int size;
+    private long totalLikes;
 }

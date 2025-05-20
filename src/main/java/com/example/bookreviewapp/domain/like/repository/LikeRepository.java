@@ -15,4 +15,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Page<Like> findAllByUserId(Long userId, Pageable pageable);
 
     Optional<Like> findByUserAndBook(User user, Book book);
+
+    //좋아요 중복 확인
+    boolean existsByUserAndBook(User user, Book book);
 }
