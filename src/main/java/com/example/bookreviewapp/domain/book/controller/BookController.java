@@ -53,7 +53,6 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<BookResponseDto>> editBook(
             @PathVariable Long id,
