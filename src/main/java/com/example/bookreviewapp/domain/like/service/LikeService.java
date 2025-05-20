@@ -43,14 +43,10 @@ public class LikeService {
 
     }
 
-    public Page<LikeResponseDto> getAllLists(Long userId, int page, int size) {
-
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").ascending());
+    public Page<LikeResponseDto> getAllLists(Long userId, Pageable pageable) {
         Page<Like> likePage = likeRepository.findAllByUserId(userId, pageable);
         return likePage.map(LikeResponseDto::fromLiketoDto);
-
     }
-
 
     public void deleteLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
