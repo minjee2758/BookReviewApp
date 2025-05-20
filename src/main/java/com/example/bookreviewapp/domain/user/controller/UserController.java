@@ -3,7 +3,9 @@ package com.example.bookreviewapp.domain.user.controller;
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
+import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.entity.Review;
+import com.example.bookreviewapp.domain.review.service.ReviewService;
 import com.example.bookreviewapp.domain.user.dto.UpdateRequestDto;
 import com.example.bookreviewapp.domain.user.dto.UserMyInfoResponseDto;
 import com.example.bookreviewapp.domain.user.service.UserService;
@@ -25,6 +27,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final ReviewService reviewService;
+
     @GetMapping
     public ResponseEntity<ApiResponse<UserMyInfoResponseDto>> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ApiResponse.onSuccess(SuccessStatus.GETMYINFO_SUCCESS, new UserMyInfoResponseDto(userDetails.getEmail(), userDetails.getUserRole()));
@@ -41,18 +45,11 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessStatus.DELETE_SUCCESS);
     }
 
-//    @GetMapping("/reviews")
-//    public ResponseEntity<ApiResponse<Page<Review>>> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                                                               @RequestParam int page,
-//                                                               @RequestParam int size) {
-//        reviewService.getReview(userDetails.getId(), page, size);
-//    }
-//
-//    public Page<Review> getReview(Long userId, int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return reviewRepository.findById(userId, pageable);
-//    }
-//
-//    Page<Review> findByUserId(Long userId, Pageable pageable);
-
+    @GetMapping("/reviews")
+    public ResponseEntity<ApiResponse<Page<ReviewResponseDto>>> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                          @RequestParam int page,
+                                                                          @RequestParam int size) {
+        Page<ReviewResponseDto> reviewResponse = reviewService.getReview(userDetails.getId(), page, size);
+        return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, reviewResponse);
+    }
 }
