@@ -32,7 +32,7 @@ public enum SuccessStatus implements BaseCode {
 	DELETE_LIKE(HttpStatus.OK, "4003", "좋아요 취소 성공."),
 
 
-
+	//5000 : 어드민 성공 코드
 	BOOK_ADD_ACCEPT_SUCCESS(HttpStatus.OK, "5001", "도서 추가 요청 승인 성공"),
 	REVIEW_PIN_SUCCESS(HttpStatus.OK, "5002", "리뷰 상단 고정 성공"),
 	REVIEW_UNPIN_SUCCESS(HttpStatus.OK, "5003", "리뷰 상단 고정 해제 성공"),
@@ -43,6 +43,8 @@ public enum SuccessStatus implements BaseCode {
 	GET_REVIEWS_SUCCESS(HttpStatus.OK, "6003", "리뷰 조회가 완료되었습니다."),
 	REVIEW_DELETE_SUCCESS(HttpStatus.OK, "6006", "리뷰 삭제 성공, 다시 로그인 해주세요."),
 
+	//7000 : 검색 성공 코드
+	SEARCH_SUCCESS(HttpStatus.OK, "7001", "검색에 성공했습니다.")
 
 	;
 
