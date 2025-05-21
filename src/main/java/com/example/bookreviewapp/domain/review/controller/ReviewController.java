@@ -66,6 +66,15 @@ public class ReviewController {
 		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEWS_SUCCESS, dto);
 	}
 
+	@GetMapping("/{bookId}/review/{reviewId}")
+	public ResponseEntity<ApiResponse<ReviewResponseDto>> getReviewDetail(
+		@PathVariable Long bookId,
+		@PathVariable Long reviewId
+	) {
+		ReviewResponseDto dto = reviewService.getReviewDetail(bookId, reviewId);
+		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, dto);
+	}
+
 	//리뷰 삭제
 	@DeleteMapping("/{bookId}/review/{reviewId}")
 	public ResponseEntity<ApiResponse<String>> deleteReview(

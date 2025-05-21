@@ -95,4 +95,17 @@ public class ReviewService {
 				.map(ReviewResponseDto::new);
 	}
 
+	//리뷰 단건 조회
+	public ReviewResponseDto getReviewDetail(Long bookId, Long reviewId) {
+		bookRepository.findById(bookId).orElseThrow(
+			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND)
+		);
+		reviewRepository.increaseViewer(reviewId);
+		Review review = reviewRepository.findById(reviewId).orElseThrow(
+			() -> new ApiException(ErrorStatus.REVIEW_NOT_FOUND)
+		);
+		return new ReviewResponseDto(review);
+	}
+}
+
 }

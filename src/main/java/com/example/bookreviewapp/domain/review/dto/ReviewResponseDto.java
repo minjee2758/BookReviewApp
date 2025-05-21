@@ -12,11 +12,13 @@ public class ReviewResponseDto {
 	private String email;
 	private String content;
 	private Integer score;
+	private Long viewer;
 
 	public ReviewResponseDto(Review review) {
 		this.title = review.getBook().getTitle();
 		this.email = review.getUser().getEmail();
 		this.content = review.getContent();
 		this.score = review.getScore();
+		this.viewer = review.getViewer();
 	}
 }
