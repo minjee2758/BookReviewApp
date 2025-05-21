@@ -1,6 +1,7 @@
 package com.example.bookreviewapp.domain.review.dto;
 
 import com.example.bookreviewapp.domain.review.entity.Review;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class ReviewResponseDto {
 
 	public ReviewResponseDto(Review review) {
 		this.title = review.getBook().getTitle();
-		this.userName = review.getUser().getEmail();
+		this.email = review.getUser().getEmail();
 		this.content = review.getContent();
 		this.score = review.getScore();
 	}
