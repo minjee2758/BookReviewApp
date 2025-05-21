@@ -54,7 +54,11 @@ public class BookService {
         return books.map(BookResponseDto::from);
     }
 
+    @Transactional
     public BookDetailsResponseDto findByDetailsBook(Long id) {
+
+        // 조회수할때 마다 1씩 증가
+        bookRepository.increaseViewer(id);
 
         Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
@@ -77,7 +81,8 @@ public class BookService {
                 findBook.getEnrollStatus(),
                 rating == null ? 0.0 : rating,  // null 방지
                 reviewCounts,
-                likeCounts
+                likeCounts,
+                findBook.getViewer()
         );
     }
 

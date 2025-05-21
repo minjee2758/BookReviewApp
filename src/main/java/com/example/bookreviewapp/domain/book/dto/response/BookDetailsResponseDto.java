@@ -30,4 +30,6 @@ public class BookDetailsResponseDto {
 
     private final Long likeCounts;
 
+    private final Long viewer;
+
 }

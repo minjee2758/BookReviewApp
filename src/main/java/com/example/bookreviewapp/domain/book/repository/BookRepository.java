@@ -1,8 +1,15 @@
 package com.example.bookreviewapp.domain.book.repository;
 
 import com.example.bookreviewapp.domain.book.entity.Book;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    @Modifying // 없으면 UPDATE / DELETE 쿼리가 실행이 안됨.
+    @Query("UPDATE Book b SET b.viewer = b.viewer + 1 WHERE b.id = :id")
+    void increaseViewer(@Param("id") Long id);
 
 }
