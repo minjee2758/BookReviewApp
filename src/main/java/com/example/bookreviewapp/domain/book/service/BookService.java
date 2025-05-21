@@ -5,6 +5,7 @@ import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
+import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
@@ -48,7 +49,8 @@ public class BookService {
     }
 
     public Page<BookResponseDto> findAllBooks(Pageable pageable) {
-        Page<Book> books = bookRepository.findAll(pageable);
+
+        Page<Book> books = bookRepository.findAllByEnrollStatus(EnrollStatus.ACCEPT, pageable);
 
         // books.map(book -> BookResponseDto.from(book)); 와 동일한 표현
         return books.map(BookResponseDto::from);
@@ -61,6 +63,11 @@ public class BookService {
         bookRepository.increaseViewer(id);
 
         Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
+
+        // 승인되지 않은 책이면 예외처리
+        if (findBook.getEnrollStatus() != EnrollStatus.ACCEPT) {
+            throw new ApiException(ErrorStatus.BOOK_NOT_APPROVED);
+        }
 
         // 리뷰 평점
         Double rating = reviewRepository.averageScore(findBook.getId());
@@ -89,7 +96,7 @@ public class BookService {
     @Transactional
     public BookResponseDto editBook(Long id, String title, String author, String category) {
 
-        // 등록된 도서 id 조회
+        // 도서 id 조회 ( 등록 여부 상관 X )
         Book findBook = bookRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
@@ -111,7 +118,7 @@ public class BookService {
     @Transactional
     public void deleteBook(Long id) {
 
-        // 등록된 도서 id 조회
+        // 도서 id 조회 ( 등록 여부 상관 X )
         Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
         bookRepository.delete(findBook);
