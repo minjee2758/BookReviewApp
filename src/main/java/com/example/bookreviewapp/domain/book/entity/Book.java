@@ -56,8 +56,4 @@ public class Book extends BaseEntity {
         this.enrollStatus = EnrollStatus.ACCEPT;
     }
 
-    // 조회수 증가 메소드
-    public void increaseViewer() {
-        this.viewer += 1;
-    }
 }
