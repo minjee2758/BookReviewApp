@@ -33,11 +33,15 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private EnrollStatus enrollStatus = EnrollStatus.REJECT;
 
+    @Column(nullable = false)
+    private Long viewer;
+
     public Book(User user, String title, String author, String category) {
         this.user = user;
         this.title = title;
         this.author = author;
         this.category = category;
+        this.viewer = 0L;
     }
 
     // 수정 메소드
@@ -50,5 +54,10 @@ public class Book extends BaseEntity {
     // 승인 메소드
     public void acceptEnroll() {
         this.enrollStatus = EnrollStatus.ACCEPT;
+    }
+
+    // 조회수 증가 메소드
+    public void increaseViewer() {
+        this.viewer += 1;
     }
 }
