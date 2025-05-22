@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.review.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,6 +29,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	@Modifying
 	@Query("UPDATE Review r SET r.viewer = r.viewer + 1 WHERE r.id = :id")
 	void increaseViewer(@Param("id") Long id);
+
+	//인기있는 리뷰 id를 리스트로 조회
+	List<Review> findByIdIn(List<Long> ids);
 }
 
 

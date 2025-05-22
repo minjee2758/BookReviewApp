@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.review.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -84,5 +86,11 @@ public class ReviewController {
 	) {
 		reviewService.deleteReview(userDetails, bookId, reviewId);
 		return ApiResponse.onSuccess(SuccessStatus.REVIEW_DELETE_SUCCESS);
+	}
+
+	@GetMapping("/review/popular")
+	public ResponseEntity<ApiResponse<List<ReviewResponseDto>>> getPopularReviews() {
+		List<ReviewResponseDto> dto = reviewService.getPopularReviews();
+		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, dto);
 	}
 }

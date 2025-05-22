@@ -1,7 +1,9 @@
 package com.example.bookreviewapp.domain.review.service;
 
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -125,6 +127,16 @@ public class ReviewService {
 		if (bookRepository.findById(bookId).get().getEnrollStatus().equals(EnrollStatus.REJECT)) {
 			throw new ApiException(ErrorStatus.BOOK_ENROLLMENT_IS_REJECTED);
 		}
+	}
+
+	@Cacheable(value = "popularReviews", key = "'top5'")
+	public List<ReviewResponseDto> getPopularReviews() {
+		List<Long> reviewIds = redisService.getTop5ReviewIds();
+		List<Review> reviews = reviewRepository.findByIdIn(reviewIds);
+
+		return reviews.stream()
+			.map(ReviewResponseDto::new)
+			.toList();
 	}
 
 }
