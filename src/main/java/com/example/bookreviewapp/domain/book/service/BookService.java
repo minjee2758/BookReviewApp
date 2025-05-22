@@ -2,6 +2,7 @@ package com.example.bookreviewapp.domain.book.service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
+import com.example.bookreviewapp.common.redis.RedisUtil;
 import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
@@ -11,9 +12,12 @@ import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
+import com.example.bookreviewapp.domain.viewhistory.entity.ViewHistory;
+import com.example.bookreviewapp.domain.viewhistory.repository.ViewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,8 @@ public class BookService {
     private final BookRepository bookRepository;
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
+    private final ViewHistoryRepository viewHistoryRepository;
+    private final RedisUtil redisUtil;
 
     @Transactional
     public BookResponseDto createBook(Long userId, String title, String author, String category) {
@@ -57,7 +63,7 @@ public class BookService {
     }
 
     @Transactional
-    public BookDetailsResponseDto findByDetailsBook(Long id) {
+    public BookDetailsResponseDto findByDetailsBook(Long id, Long userId) {
 
         // 조회수할때 마다 1씩 증가
         bookRepository.increaseViewer(id);
@@ -68,6 +74,13 @@ public class BookService {
         if (findBook.getEnrollStatus() != EnrollStatus.ACCEPT) {
             throw new ApiException(ErrorStatus.BOOK_NOT_APPROVED);
         }
+
+        // 조회 시 viewHistory 생성
+        ViewHistory view = new ViewHistory(userId, findBook.getCategory());
+
+        viewHistoryRepository.save(view);
+
+        redisUtil.addViewHistory(userId, findBook.getCategory());
 
         // 리뷰 평점
         Double rating = reviewRepository.averageScore(findBook.getId());

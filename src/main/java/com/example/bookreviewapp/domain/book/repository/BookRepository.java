@@ -17,4 +17,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAllByEnrollStatus(EnrollStatus enrollStatus, Pageable pageable);
 
+    @Query("SELECT b FROM Book b LEFT JOIN Review r ON r.book = b WHERE b.category = :category AND b.enrollStatus = 'ACCEPT' GROUP BY b ORDER BY COUNT(r.id) desc")
+    Page<Book> findBooksByCategory(@Param("category") String category, Pageable pageable);
 }

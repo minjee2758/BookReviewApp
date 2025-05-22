@@ -46,9 +46,11 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookDetailsResponseDto>> findByDetailsBook(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<BookDetailsResponseDto>> findByDetailsBook(@PathVariable Long id,
+                                                                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getId();
 
-        BookDetailsResponseDto responseDto = bookService.findByDetailsBook(id);
+        BookDetailsResponseDto responseDto = bookService.findByDetailsBook(id, userId);
 
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
