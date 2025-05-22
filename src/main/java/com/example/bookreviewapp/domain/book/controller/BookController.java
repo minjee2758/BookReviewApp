@@ -7,6 +7,7 @@ import com.example.bookreviewapp.domain.book.dto.request.CreateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
+import com.example.bookreviewapp.domain.book.dto.response.BookViewedTop10ResponseDto;
 import com.example.bookreviewapp.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,5 +73,13 @@ public class BookController {
         bookService.deleteBook(id);
 
         return ApiResponse.onSuccess(SuccessStatus.DELETE_BOOK);
+    }
+
+    @GetMapping("/viewedTop10")
+    public ResponseEntity<ApiResponse<List<BookViewedTop10ResponseDto>>> findTop10ViewBooks() {
+
+        List<BookViewedTop10ResponseDto> responseDtoList = bookService.findTop10ViewBooks();
+
+        return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDtoList);
     }
 }

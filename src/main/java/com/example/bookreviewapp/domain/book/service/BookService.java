@@ -4,6 +4,7 @@ import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.book.dto.response.BookDetailsResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
+import com.example.bookreviewapp.domain.book.dto.response.BookViewedTop10ResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
@@ -14,8 +15,13 @@ import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -26,6 +32,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public BookResponseDto createBook(Long userId, String title, String author, String category) {
@@ -61,6 +68,9 @@ public class BookService {
 
         // 조회수할때 마다 1씩 증가
         bookRepository.increaseViewer(id);
+
+        // 조회 수 캐싱 (Z-set 기록)
+        redisTemplate.opsForZSet().incrementScore("book:view:ranking", "book:" + id, 1);
 
         Book findBook = bookRepository.findById(id).orElseThrow(() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
@@ -124,4 +134,38 @@ public class BookService {
         bookRepository.delete(findBook);
     }
 
+    @Transactional(readOnly = true)
+    public List<BookViewedTop10ResponseDto> findTop10ViewBooks() {
+
+        Set<String> topBookKeys = redisTemplate.opsForZSet().reverseRange("book:view:ranking", 0, 9);// 조회수 내림차순 상위 10개
+
+        if (topBookKeys == null || topBookKeys.isEmpty()) {
+            return List.of();
+        }
+
+        // "book:1" -> 1 추출 ( Redis 해당하는 id값 )
+        List<Long> bookIds = topBookKeys.stream()
+                .map(key -> Long.parseLong(key.replace("book:", "")))
+                .collect(Collectors.toList());
+
+        // DB 실제 책 정보 조회
+        List<Book> books = bookRepository.findAllById(bookIds);
+
+        // 승인된 책만 보이게 예외처리
+        Map<Long, Book> bookMap = books.stream()
+                .filter(book -> book.getEnrollStatus() == EnrollStatus.ACCEPT)
+                .collect(Collectors.toMap(Book::getId, Function.identity()));
+
+        List<BookViewedTop10ResponseDto> result = new ArrayList<>();
+
+        int rank = 1;
+        for (Long bookId: bookIds) {
+            Book book = bookMap.get(bookId);
+            if (book != null) {
+                result.add(BookViewedTop10ResponseDto.from(book, rank++));
+            }
+        }
+
+        return result;
+    }
 }

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Modifying // 없으면 UPDATE / DELETE 쿼리가 실행이 안됨.
@@ -16,5 +18,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     void increaseViewer(@Param("id") Long id);
 
     Page<Book> findAllByEnrollStatus(EnrollStatus enrollStatus, Pageable pageable);
+
+    List<Book> findTop10ByEnrollStatusOrderByViewerDesc(EnrollStatus enrollStatus);
+
 
 }
