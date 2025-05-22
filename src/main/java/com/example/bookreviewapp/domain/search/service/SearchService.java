@@ -38,11 +38,6 @@ public class SearchService {
 		Double score = redisTemplate.opsForZSet()
 			.incrementScore(ZSET_KEY, keyword, 1);
 
-		Long ttl = redisTemplate.getExpire(ZSET_KEY);
-		if (ttl == null || ttl < 0) {
-			redisTemplate.expire(ZSET_KEY, Duration.ofDays(1));
-		}
-
 
 		return new SearchResponseDto(
 			searchRepository.searchBooks(keyword, bookPageable),
