@@ -1,4 +1,4 @@
-package com.example.bookreviewapp.domain.like.dto;
+package com.example.bookreviewapp.domain.like.dto.response;
 
 import com.example.bookreviewapp.domain.like.entity.Like;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,8 @@
-package com.example.bookreviewapp.domain.like.dto;
+package com.example.bookreviewapp.domain.like.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter

@@ -4,9 +4,9 @@ import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
-import com.example.bookreviewapp.domain.like.dto.LikeRequestDto;
-import com.example.bookreviewapp.domain.like.dto.LikeResponseDto;
-import com.example.bookreviewapp.domain.like.dto.UserLikesResponseDto;
+import com.example.bookreviewapp.domain.like.dto.request.LikeRequestDto;
+import com.example.bookreviewapp.domain.like.dto.response.LikeResponseDto;
+import com.example.bookreviewapp.domain.like.dto.response.UserLikesResponseDto;
 import com.example.bookreviewapp.domain.like.entity.Like;
 import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
@@ -29,6 +29,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final LikeRankingService likeRankingService;
 
     public void saveLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
@@ -45,6 +46,9 @@ public class LikeService {
 
         Like like = new Like(user, book, LocalDateTime.now());
         likeRepository.save(like);
+
+        // Redis 랭킹 점수 증가 (책, 작가)
+        likeRankingService.likeBook(String.valueOf(book.getId()), book.getAuthor());
     }
 
     public UserLikesResponseDto getUserLikes(Long userId, Pageable pageable) {
@@ -74,7 +78,12 @@ public class LikeService {
         Like like = likeRepository.findByUserAndBook(user, book)
                 .orElseThrow(() -> new ApiException(ErrorStatus.LIKE_NOT_FOUND));
 
+        // DB 좋아요 삭제
         likeRepository.delete(like);
+
+        // Redis 랭킹 점수 감소
+        likeRankingService.unlikeBook(String.valueOf(book.getId()), book.getAuthor());
+
     }
 
 }

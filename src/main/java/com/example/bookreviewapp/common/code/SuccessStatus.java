@@ -29,9 +29,10 @@ public enum SuccessStatus implements BaseCode {
  
 	//4000 : 좋아요 성공 코드
 	CREATE_LIKE(HttpStatus.CREATED, "4001" , "좋아요 성공"),
-	GETINFO_LIKE(HttpStatus.OK, "4002" , "좋아요 조회 성공"),
+	GET_INFO_LIKE(HttpStatus.OK, "4002" , "좋아요 조회 성공"),
 	DELETE_LIKE(HttpStatus.OK, "4003", "좋아요 취소 성공."),
 
+	GET_RANKING_LIKE(HttpStatus.OK, "4101" , "랭킹 조회 성공"),
 
 	//5000 : 어드민 성공 코드
 	BOOK_ADD_ACCEPT_SUCCESS(HttpStatus.OK, "5001", "도서 추가 요청 승인 성공"),

@@ -3,8 +3,8 @@ package com.example.bookreviewapp.domain.like.controller;
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
-import com.example.bookreviewapp.domain.like.dto.LikeRequestDto;
-import com.example.bookreviewapp.domain.like.dto.UserLikesResponseDto;
+import com.example.bookreviewapp.domain.like.dto.request.LikeRequestDto;
+import com.example.bookreviewapp.domain.like.dto.response.UserLikesResponseDto;
 import com.example.bookreviewapp.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +50,7 @@ public class LikeController {
         );
 
         UserLikesResponseDto responseDto = likeService.getUserLikes(userDetails.getId(), pageable);
-        return ApiResponse.onSuccess(SuccessStatus.GETINFO_LIKE, List.of(responseDto));
+        return ApiResponse.onSuccess(SuccessStatus.GET_INFO_LIKE, List.of(responseDto));
     }
 
     @DeleteMapping("/likes")
