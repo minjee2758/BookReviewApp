@@ -26,11 +26,6 @@ public class SearchService {
 
 	public static final String ZSET_KEY = "search:popular";
 
-	@Cacheable(
-		value = "searchResults",
-		key   = "T(java.lang.String).format('%s::b%d::r%d', #keyword, #bookPageable.pageNumber, #reviewPageable.pageNumber)",
-		unless= "#result == null"
-	)
 	public SearchResponseDto search(String keyword,
 		Pageable bookPageable,
 		Pageable reviewPageable) {
