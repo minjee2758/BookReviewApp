@@ -22,7 +22,7 @@ public class BookViewedRankingScheduler {
     private final BookRepository bookRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
-    @Scheduled(fixedRate = 1000 * 60 * 60) // 1000 = 1초 (20초마다 업데이트)
+    @Scheduled(fixedRate = 1000 * 60 * 60) // 1000 = 1초 ( 1시간마다 업데이트 )
     public void updateTopViewedBooksIn() {
         log.info("[도서 가장 많은 조회순 시작]");
 
