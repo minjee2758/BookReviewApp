@@ -137,13 +137,14 @@ public class BookService {
     @Transactional(readOnly = true)
     public List<BookViewedTop10ResponseDto> findTop10ViewBooks() {
 
-        Set<String> topBookKeys = redisTemplate.opsForZSet().reverseRange("book:view:ranking", 0, 9);// 조회수 내림차순 상위 10개
+        // 조회수 내림차순 상위 10개
+        Set<String> topBookKeys = redisTemplate.opsForZSet().reverseRange("book:view:ranking", 0, 9);
 
         if (topBookKeys == null || topBookKeys.isEmpty()) {
-            return List.of();
+            return List.of(); // 빈 리스트 반환
         }
 
-        // "book:1" -> 1 추출 ( Redis 해당하는 id값 )
+        // "book:1" -> 1 추출 ( Redis 해당하는 id값 ), 문자열에서 id값만 추출해내는 작업
         List<Long> bookIds = topBookKeys.stream()
                 .map(key -> Long.parseLong(key.replace("book:", "")))
                 .collect(Collectors.toList());
@@ -155,6 +156,8 @@ public class BookService {
         Map<Long, Book> bookMap = books.stream()
                 .filter(book -> book.getEnrollStatus() == EnrollStatus.ACCEPT)
                 .collect(Collectors.toMap(Book::getId, Function.identity()));
+        // Collectors 는 Java Stream API 에서 스트림의 결과를 원하는 형태로 수집할 때 사용
+        // Function.identity(): 객체 자체 (book)를 value 로 사용
 
         List<BookViewedTop10ResponseDto> result = new ArrayList<>();
 
