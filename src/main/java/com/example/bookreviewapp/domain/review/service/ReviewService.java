@@ -11,6 +11,7 @@ import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.book.entity.Book;
+import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.dto.ReviewResquestDto;
@@ -30,9 +31,12 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
+	private final RedisService redisService;
 
 	//리뷰 등록
 	public void postReview(CustomUserDetails userDetails, Long bookId, ReviewResquestDto dto) {
+		rejectReview(bookId);
+
 		Book book = bookRepository.findById(bookId).orElseThrow(
 			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
 
@@ -61,6 +65,8 @@ public class ReviewService {
 
 	//리뷰 조회
 	public Page<ReviewResponseDto> getReviews(Long bookId, Pageable pageable) {
+		rejectReview(bookId);
+
 		Page<Review> reviewPage = reviewRepository.findByBookId(bookId, pageable);
 
 		// DTO로 변환
@@ -69,7 +75,8 @@ public class ReviewService {
 				review.getBook().getTitle(),
 				review.getUser().getEmail(),
 				review.getContent(),
-				review.getScore()
+				review.getScore(),
+				review.getViewer()
 			)
 		);
 	}
@@ -92,7 +99,7 @@ public class ReviewService {
 	public Page<ReviewResponseDto> getReview(Long userId, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		return reviewRepository.findByUserId(userId, pageable)
-				.map(ReviewResponseDto::new);
+			.map(ReviewResponseDto::new);
 	}
 
 	//리뷰 단건 조회
@@ -100,12 +107,24 @@ public class ReviewService {
 		bookRepository.findById(bookId).orElseThrow(
 			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND)
 		);
+
+		rejectReview(bookId);
+
+		// Redis에 조회수 증가
+		redisService.increaseReviewViewCount(reviewId); // 추가
+
 		reviewRepository.increaseViewer(reviewId);
 		Review review = reviewRepository.findById(reviewId).orElseThrow(
 			() -> new ApiException(ErrorStatus.REVIEW_NOT_FOUND)
 		);
 		return new ReviewResponseDto(review);
 	}
-}
+
+	//책 상태가 REJECT면 조회 거부
+	public void rejectReview(Long bookId) {
+		if (bookRepository.findById(bookId).get().getEnrollStatus().equals(EnrollStatus.REJECT)) {
+			throw new ApiException(ErrorStatus.BOOK_ENROLLMENT_IS_REJECTED);
+		}
+	}
 
 }
