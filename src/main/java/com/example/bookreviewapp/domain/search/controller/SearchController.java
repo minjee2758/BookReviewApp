@@ -23,7 +23,7 @@ import com.example.bookreviewapp.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/search")
 @RequiredArgsConstructor
 public class SearchController {
 	private final SearchService searchService;
