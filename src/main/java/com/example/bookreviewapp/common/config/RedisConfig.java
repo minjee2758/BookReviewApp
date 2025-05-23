@@ -28,4 +28,20 @@ public class RedisConfig {
         tpl.afterPropertiesSet();
         return tpl;
     }
+    @Bean
+    public RedisTemplate<String, Object> redisTemplateForObject(RedisConnectionFactory cf) {
+        RedisTemplate<String, Object> tpl = new RedisTemplate<>();
+        tpl.setConnectionFactory(cf);
+
+        // 키는 String, 값은 JSON 직렬화
+        tpl.setKeySerializer(new StringRedisSerializer());
+        tpl.setValueSerializer(new org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer());
+
+        tpl.setHashKeySerializer(new StringRedisSerializer());
+        tpl.setHashValueSerializer(new org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer());
+
+        tpl.afterPropertiesSet();
+        return tpl;
+    }
+
 }

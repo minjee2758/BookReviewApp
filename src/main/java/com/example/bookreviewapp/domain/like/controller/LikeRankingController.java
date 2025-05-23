@@ -1,6 +1,8 @@
 package com.example.bookreviewapp.domain.like.controller;
 
+import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.code.SuccessStatus;
+import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.like.dto.response.AuthorRankingResponseDto;
@@ -26,6 +28,9 @@ public class LikeRankingController {
     public ResponseEntity<ApiResponse<List<BookRankingResponseDto>>> getTop10Books(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            throw new ApiException(ErrorStatus.TOKEN_NOT_FOUND); // 토큰 없을 때 예외
+        }
         List<BookRankingResponseDto> response = likeRankingService.getTop10BooksWithTitle();
         return ApiResponse.onSuccess(SuccessStatus.GET_RANKING_LIKE, response);
     }
@@ -35,6 +40,9 @@ public class LikeRankingController {
     public ResponseEntity<ApiResponse<List<AuthorRankingResponseDto>>> getTop10Authors(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            throw new ApiException(ErrorStatus.TOKEN_NOT_FOUND); // 토큰 없을 때 예외
+        }
         List<AuthorRankingResponseDto> response = likeRankingService.getTop10Authors();
         return ApiResponse.onSuccess(SuccessStatus.GET_RANKING_LIKE, response);
     }

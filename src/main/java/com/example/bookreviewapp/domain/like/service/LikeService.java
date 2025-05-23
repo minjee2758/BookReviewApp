@@ -4,6 +4,7 @@ import com.example.bookreviewapp.common.code.ErrorStatus;
 import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
+import com.example.bookreviewapp.domain.like.aop.LikeLock;
 import com.example.bookreviewapp.domain.like.dto.request.LikeRequestDto;
 import com.example.bookreviewapp.domain.like.dto.response.LikeResponseDto;
 import com.example.bookreviewapp.domain.like.dto.response.UserLikesResponseDto;
@@ -31,6 +32,7 @@ public class LikeService {
     private final BookRepository bookRepository;
     private final LikeRankingService likeRankingService;
 
+    @LikeLock(key = "#userId + ':' + #requestDto.id")
     public void saveLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
@@ -67,6 +69,7 @@ public class LikeService {
         );
     }
 
+    @LikeLock(key = "#userId + ':' + #requestDto.id")
     public void deleteLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
