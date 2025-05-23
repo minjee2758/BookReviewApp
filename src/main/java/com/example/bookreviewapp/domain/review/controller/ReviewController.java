@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.review.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +22,7 @@ import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.dto.ReviewResquestDto;
+import com.example.bookreviewapp.domain.review.dto.ReviewTop5ResponseDto;
 import com.example.bookreviewapp.domain.review.service.ReviewService;
 
 import jakarta.validation.Valid;
@@ -66,6 +69,15 @@ public class ReviewController {
 		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEWS_SUCCESS, dto);
 	}
 
+	@GetMapping("/{bookId}/review/{reviewId}")
+	public ResponseEntity<ApiResponse<ReviewResponseDto>> getReviewDetail(
+		@PathVariable Long bookId,
+		@PathVariable Long reviewId
+	) {
+		ReviewResponseDto dto = reviewService.getReviewDetail(bookId, reviewId);
+		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, dto);
+	}
+
 	//리뷰 삭제
 	@DeleteMapping("/{bookId}/review/{reviewId}")
 	public ResponseEntity<ApiResponse<String>> deleteReview(
@@ -75,5 +87,11 @@ public class ReviewController {
 	) {
 		reviewService.deleteReview(userDetails, bookId, reviewId);
 		return ApiResponse.onSuccess(SuccessStatus.REVIEW_DELETE_SUCCESS);
+	}
+
+	@GetMapping("/review/popular")
+	public ResponseEntity<ApiResponse<List<ReviewTop5ResponseDto>>> getPopularReviews() {
+		List<ReviewTop5ResponseDto> dto = reviewService.getTop5Reviews();
+		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, dto);
 	}
 }
