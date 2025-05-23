@@ -65,7 +65,10 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom{
 				book.title,
 				review.user.email,
 				review.content,
-				review.score
+				review.score,
+				review.viewer,
+				review.createdAt,
+				review.updatedAt
 			))
 			.from(review)
 			.join(review.book, book)
