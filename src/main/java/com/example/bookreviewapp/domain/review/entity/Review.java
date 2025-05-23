@@ -4,6 +4,7 @@ import com.example.bookreviewapp.common.entity.BaseEntity;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.user.entity.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -41,6 +42,9 @@ public class Review extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PinStatus isPinned = PinStatus.UNPINNED;
 
+	//리뷰 조회수
+	@Column(nullable = false)
+	private Long viewer;
 
 	//핀 설정
 	public void pinned() {
@@ -58,6 +62,7 @@ public class Review extends BaseEntity {
 		this.content = content;
 		this.score = score;
 		this.isPinned = isPinned;
+		this.viewer = 0L;
 	}
 
 	//리뷰 수정시
