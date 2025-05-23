@@ -93,7 +93,9 @@ public class BookService {
 
         viewHistoryRepository.save(view);
 
-        redisUtil.addViewHistory(userId, findBook.getCategory());
+        redisUtil.addViewHistoryCategory(userId, findBook.getCategory());
+
+        redisUtil.addViewHistoryBookId(userId, findBook.getId());
 
         // 리뷰 평점
         Double rating = reviewRepository.averageScore(findBook.getId());

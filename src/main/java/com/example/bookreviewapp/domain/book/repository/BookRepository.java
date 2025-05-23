@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
@@ -19,8 +20,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAllByEnrollStatus(EnrollStatus enrollStatus, Pageable pageable);
 
-    @Query("SELECT b FROM Book b LEFT JOIN Review r ON r.book = b WHERE b.category = :category AND b.enrollStatus = 'ACCEPT' GROUP BY b ORDER BY COUNT(r.id) desc")
-    Page<Book> findBooksByCategory(@Param("category") String category, Pageable pageable);
+    @Query("SELECT b FROM Book b LEFT JOIN Review r ON r.book = b WHERE b.category = :category AND b.enrollStatus = 'ACCEPT' AND b.id NOT IN :viewedBookIds GROUP BY b ORDER BY COUNT(r.id) desc")
+    Page<Book> findBooksByCategory(@Param("category") String category, @Param("viewedBookIds") Set<Long> viewedBookIds, Pageable pageable);
 
     List<Book> findTop10ByEnrollStatusOrderByViewerDesc(EnrollStatus enrollStatus);
 
