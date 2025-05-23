@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorStatus implements BaseErrorCode {
 	//user 에러 코드
 	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "3001", "고객 정보가 없습니다."),
+	USER_DEACTIVATE(HttpStatus.FORBIDDEN, "3002", "비활성화된 계정입니다."),
+	USER_NOT_MATCH(HttpStatus.UNAUTHORIZED, "3003", "로그인 정보가 일치하지 않습니다."),
+	DUPLICATE_EMAIL(HttpStatus.CONFLICT, "3004", "이미 사용중인 이메일입니다."),
 
 	//book 에러 코드
 	BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "2100", "도서 정보를 찾을수 없습니다."),
