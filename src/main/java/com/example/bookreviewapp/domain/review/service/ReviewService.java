@@ -104,8 +104,7 @@ public class ReviewService {
 		reviewRepository.deleteById(reviewId);
 	}
 
-	public Page<ReviewResponseDto> getReview(Long userId, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size);
+	public Page<ReviewResponseDto> getReview(Long userId, Pageable pageable) {
 		return reviewRepository.findByUserId(userId, pageable)
 			.map(ReviewResponseDto::new);
 	}

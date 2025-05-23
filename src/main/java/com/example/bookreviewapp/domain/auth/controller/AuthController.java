@@ -59,10 +59,10 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissueToken(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<String>> reissueToken(HttpServletRequest request) {
 
         String accessToken = authService.reissueToken(request);
 
-        return new ResponseEntity<>(accessToken, HttpStatus.OK);
+        return ApiResponse.onSuccess(SuccessStatus.REISSUE_SUCCESS, accessToken);
     }
 }

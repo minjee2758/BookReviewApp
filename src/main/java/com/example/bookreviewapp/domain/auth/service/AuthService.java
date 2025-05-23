@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.auth.service;
 
+import com.example.bookreviewapp.common.code.ErrorStatus;
+import com.example.bookreviewapp.common.error.ApiException;
 import com.example.bookreviewapp.common.jwt.JwtUtil;
 import com.example.bookreviewapp.common.jwt.TokenService;
 import com.example.bookreviewapp.domain.auth.dto.TokenDto;
@@ -10,6 +12,7 @@ import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,20 +32,23 @@ public class AuthService {
         String encodePassword = passwordEncoder.encode(password);
 
         User saveUser = new User(email, encodePassword, userRole);
-
-        userRepository.save(saveUser);
+        try {
+            userRepository.save(saveUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new ApiException(ErrorStatus.DUPLICATE_EMAIL);
+        }
     }
 
     public TokenDto login(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("이메일이 없음"));
+                .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
 
         if(user.getUserStatus() != UserStatus.ACTIVE) {
-            throw new IllegalArgumentException("비활성화된 계정");
+            throw new ApiException(ErrorStatus.USER_DEACTIVATE);
         }
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호");
+            throw new ApiException(ErrorStatus.USER_NOT_MATCH);
         }
 
         String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getUserRole());
@@ -69,7 +75,7 @@ public class AuthService {
         String savedRefreshToken = tokenService.getRefreshToken(userId);
 
         if(!refreshToken.equals(savedRefreshToken)) {
-            throw new IllegalArgumentException("리프레시 토큰 불일치");
+            throw new ApiException(ErrorStatus.INVALID_TOKEN);
         }
 
         String oldAccessToken = jwtUtil.resolveAccessToken(request);
@@ -79,7 +85,7 @@ public class AuthService {
         }
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정"));
+                .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
 
         String newAccessToken = jwtUtil.createAccessToken(userId, user.getEmail(), user.getUserRole());
 
