@@ -44,8 +44,8 @@ public enum SuccessStatus implements BaseCode {
 	REVIEW_DELETE_SUCCESS(HttpStatus.OK, "6006", "리뷰 삭제 성공, 다시 로그인 해주세요."),
 
 	//7000 : 검색 성공 코드
-	SEARCH_SUCCESS(HttpStatus.OK, "7001", "검색에 성공했습니다.")
-
+	SEARCH_SUCCESS(HttpStatus.OK, "7001", "검색에 성공했습니다."),
+	POPULAR_SEARCH_SUCCESS(HttpStatus.OK,"7002","인기 검색어 호출에 성공했습니다")
 	;
 
 	private final HttpStatus httpStatus;
