@@ -69,6 +69,7 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom{
 				review.viewer,
 				review.createdAt,
 				review.updatedAt
+
 			))
 			.from(review)
 			.join(review.book, book)
