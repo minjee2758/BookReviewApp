@@ -36,7 +36,7 @@ public class LikeRankingService {
         redisTemplate.opsForZSet().incrementScore(BOOK_SCORE_KEY, bookId, 1);
         redisTemplate.opsForZSet().incrementScore(AUTHOR_SCORE_KEY, authorName, 1);
 
-        // 캐시 무효화
+        // 캐시 무효화.
         redisTemplate.delete(BOOK_CACHE_KEY);
         redisTemplate.delete(AUTHOR_CACHE_KEY);
     }
