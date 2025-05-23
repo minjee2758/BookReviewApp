@@ -46,7 +46,7 @@ public class SearchController {
 	public ResponseEntity<ApiResponse<List<PopularKeywordDto>>> popular(
 		@RequestParam(defaultValue = "10") int top
 	) {
-		List<PopularKeywordDto> popular = searchService.getPopular(top);          // 🔄 메서드 변경 반영
+		List<PopularKeywordDto> popular = searchService.getPopular(top);
 		return ApiResponse.onSuccess(
 			SuccessStatus.POPULAR_SEARCH_SUCCESS,
 			popular
