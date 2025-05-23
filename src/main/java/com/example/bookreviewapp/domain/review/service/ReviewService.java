@@ -1,12 +1,14 @@
 package com.example.bookreviewapp.domain.review.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.bookreviewapp.common.code.ErrorStatus;
@@ -17,6 +19,7 @@ import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
 import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.dto.ReviewResquestDto;
+import com.example.bookreviewapp.domain.review.dto.ReviewTop5ResponseDto;
 import com.example.bookreviewapp.domain.review.entity.PinStatus;
 import com.example.bookreviewapp.domain.review.entity.Review;
 import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
@@ -33,7 +36,8 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
-	private final RedisService redisService;
+	private final ReviewRankingScheduler reviewRankingScheduler;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	//리뷰 등록
 	public void postReview(CustomUserDetails userDetails, Long bookId, ReviewResquestDto dto) {
@@ -78,7 +82,9 @@ public class ReviewService {
 				review.getUser().getEmail(),
 				review.getContent(),
 				review.getScore(),
-				review.getViewer()
+				review.getViewer(),
+				review.getCreatedAt(),
+				review.getUpdatedAt()
 			)
 		);
 	}
@@ -113,7 +119,7 @@ public class ReviewService {
 		rejectReview(bookId);
 
 		// Redis에 조회수 증가
-		redisService.increaseReviewViewCount(reviewId); // 추가
+		redisTemplate.opsForZSet().incrementScore("review:view:ranking", "review:" + reviewId, 1);
 
 		reviewRepository.increaseViewer(reviewId);
 		Review review = reviewRepository.findById(reviewId).orElseThrow(
@@ -129,14 +135,29 @@ public class ReviewService {
 		}
 	}
 
-	@Cacheable(value = "popularReviews", key = "'top5'")
-	public List<ReviewResponseDto> getPopularReviews() {
-		List<Long> reviewIds = redisService.getTop5ReviewIds();
-		List<Review> reviews = reviewRepository.findByIdIn(reviewIds);
+	//인기 리뷰 조회
+	public List<ReviewTop5ResponseDto> getTop5Reviews() {
+		Set<String> topReviewKeys = redisTemplate.opsForZSet().reverseRange("review:view:ranking", 0, 4);
 
-		return reviews.stream()
-			.map(ReviewResponseDto::new)
-			.toList();
+		if (topReviewKeys == null || topReviewKeys.isEmpty()) {
+			return List.of();
+		}
+
+		List<Long> reviewIds = new ArrayList<>();
+		for (String key : topReviewKeys) {
+			Long parseLong = Long.parseLong(key.replace("review:", ""));
+			reviewIds.add(parseLong);
+		}
+
+		List<ReviewTop5ResponseDto> result = new ArrayList<>();
+
+		int rank = 1;
+
+		for (Long reviewId : reviewIds) {
+			Review review = reviewRepository.findById(reviewId).orElseThrow();
+			result.add(ReviewTop5ResponseDto.from(review, rank++));
+		}
+		return result;
 	}
 
 }

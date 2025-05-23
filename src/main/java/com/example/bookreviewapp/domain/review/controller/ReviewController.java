@@ -22,6 +22,7 @@ import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.dto.ReviewResquestDto;
+import com.example.bookreviewapp.domain.review.dto.ReviewTop5ResponseDto;
 import com.example.bookreviewapp.domain.review.service.ReviewService;
 
 import jakarta.validation.Valid;
@@ -89,8 +90,8 @@ public class ReviewController {
 	}
 
 	@GetMapping("/review/popular")
-	public ResponseEntity<ApiResponse<List<ReviewResponseDto>>> getPopularReviews() {
-		List<ReviewResponseDto> dto = reviewService.getPopularReviews();
+	public ResponseEntity<ApiResponse<List<ReviewTop5ResponseDto>>> getPopularReviews() {
+		List<ReviewTop5ResponseDto> dto = reviewService.getTop5Reviews();
 		return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, dto);
 	}
 }

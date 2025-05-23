@@ -30,8 +30,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	@Query("UPDATE Review r SET r.viewer = r.viewer + 1 WHERE r.id = :id")
 	void increaseViewer(@Param("id") Long id);
 
-	//인기있는 리뷰 id를 리스트로 조회
-	List<Review> findByIdIn(List<Long> ids);
+	List<Review> findTop5ByOrderByViewerDesc();
 }
 
 
