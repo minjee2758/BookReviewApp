@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 @Service
 @RequiredArgsConstructor
 public class BookService {
@@ -34,6 +33,7 @@ public class BookService {
     private final LikeRepository likeRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
+    // 도서 생성
     @Transactional
     public BookResponseDto createBook(Long userId, String title, String author, String category) {
 
@@ -55,6 +55,7 @@ public class BookService {
         );
     }
 
+    // 도서 목록 조회
     public Page<BookResponseDto> findAllBooks(Pageable pageable) {
 
         Page<Book> books = bookRepository.findAllByEnrollStatus(EnrollStatus.ACCEPT, pageable);
@@ -63,6 +64,7 @@ public class BookService {
         return books.map(BookResponseDto::from);
     }
 
+    // 도서 상세 조회
     @Transactional
     public BookDetailsResponseDto findByDetailsBook(Long id) {
 
@@ -103,6 +105,7 @@ public class BookService {
         );
     }
 
+    // 도서 수정
     @Transactional
     public BookResponseDto editBook(Long id, String title, String author, String category) {
 
@@ -125,6 +128,7 @@ public class BookService {
         );
     }
 
+    // 도서 삭제
     @Transactional
     public void deleteBook(Long id) {
 
@@ -134,6 +138,7 @@ public class BookService {
         bookRepository.delete(findBook);
     }
 
+    // 조회순 Top 10 조회
     @Transactional(readOnly = true)
     public List<BookViewedTop10ResponseDto> findTop10ViewBooks() {
 

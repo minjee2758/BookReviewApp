@@ -27,6 +27,7 @@ public class BookController {
 
     private final BookService bookService;
 
+    // 도서 생성
     @PostMapping
     public ResponseEntity<ApiResponse<BookResponseDto>> createBook(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -38,6 +39,7 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.CREATE_BOOK, responseDto);
     }
 
+    // 도서 목록 조회
     @GetMapping
     public ResponseEntity<ApiResponse<Page<BookResponseDto>>> findAllBooks(
             @PageableDefault(direction = Sort.Direction.DESC, sort = "createdAt") Pageable pageable
@@ -48,6 +50,7 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
 
+    // 도서 상세 조회
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BookDetailsResponseDto>> findByDetailsBook(@PathVariable Long id) {
 
@@ -56,6 +59,7 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
 
+    // 도서 수정
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<BookResponseDto>> editBook(
             @PathVariable Long id,
@@ -67,6 +71,7 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.UPDATE_BOOK, responseDto);
     }
 
+    // 도서 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBook(@PathVariable Long id) {
 
@@ -75,6 +80,7 @@ public class BookController {
         return ApiResponse.onSuccess(SuccessStatus.DELETE_BOOK);
     }
 
+    // 조회순 Top 10 조회
     @GetMapping("/viewedTop10")
     public ResponseEntity<ApiResponse<List<BookViewedTop10ResponseDto>>> findTop10ViewBooks() {
 
