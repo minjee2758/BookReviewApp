@@ -56,7 +56,7 @@ public class BookController {
                                                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getId();
 
-        BookDetailsResponseDto responseDto = bookService.findByDetailsBook(userId);
+        BookDetailsResponseDto responseDto = bookService.findByDetailsBook(id,userId);
 
         return ApiResponse.onSuccess(SuccessStatus.FIND_BOOK, responseDto);
     }
