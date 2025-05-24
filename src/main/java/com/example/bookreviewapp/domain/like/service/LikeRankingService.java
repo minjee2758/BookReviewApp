@@ -23,12 +23,11 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class LikeRankingService {
 
-    //@Qualifier("redisTemplateForObject")여러개의 RedisTemplate 빈 중에서 정확히 어떤 것을 주입해야 하는지 지정해주는 어노테이션
     @Qualifier("redisTemplateForObject")
     private final RedisTemplate<String, Object> redisTemplate;
     private final BookRepository bookRepository;
 
-    private static final Duration TTL = Duration.ofMinutes(60); // 캐시 유효 시간
+    private static final Duration TTL = Duration.ofMinutes(60);
 
     private static final String BOOK_SCORE_KEY = "book:like:ranking";
     private static final String AUTHOR_SCORE_KEY = "author:like:ranking";
@@ -41,7 +40,7 @@ public class LikeRankingService {
         redisTemplate.opsForZSet().incrementScore(BOOK_SCORE_KEY, bookId, 1);
         redisTemplate.opsForZSet().incrementScore(AUTHOR_SCORE_KEY, authorName, 1);
 
-        // 캐시 무효화.
+        // 캐시 무효화
         redisTemplate.delete(BOOK_CACHE_KEY);
         redisTemplate.delete(AUTHOR_CACHE_KEY);
     }
@@ -62,6 +61,8 @@ public class LikeRankingService {
         redisTemplate.delete(BOOK_CACHE_KEY);
         redisTemplate.delete(AUTHOR_CACHE_KEY);
     }
+
+    // 책 랭킹 조회 (캐시 적용)
     public List<BookRankingResponseDto> getTop10BooksWithTitle() {
         List<BookRankingResponseDto> cached = (List<BookRankingResponseDto>) redisTemplate.opsForValue().get(BOOK_CACHE_KEY);
         if (cached != null) return cached;
@@ -71,7 +72,6 @@ public class LikeRankingService {
 
         if (topBooks == null) return List.of();
 
-        // Set을 List로 변환하여 인덱스 사용 가능하게 만듦
         List<ZSetOperations.TypedTuple<Object>> topBooksList = new ArrayList<>(topBooks);
 
         List<BookRankingResponseDto> ranking = IntStream.range(0, topBooksList.size())
@@ -79,7 +79,7 @@ public class LikeRankingService {
                     ZSetOperations.TypedTuple<Object> tuple = topBooksList.get(i);
                     Long bookId = Long.parseLong((String) tuple.getValue());
                     int score = tuple.getScore() != null ? (int) Math.round(tuple.getScore()) : 0;
-                    int rank = i + 1;  // 랭킹은 1부터 시작
+                    int rank = i + 1;
                     return bookRepository.findById(bookId)
                             .map(book -> new BookRankingResponseDto(rank, book.getTitle(), score))
                             .orElse(null);
@@ -91,8 +91,7 @@ public class LikeRankingService {
         return ranking;
     }
 
-
-    // 작가 랭킹 Top 10 조회 (캐싱 적용)
+    // 작가 랭킹 조회 (캐시 적용)
     public List<AuthorRankingResponseDto> getTop10Authors() {
         List<AuthorRankingResponseDto> cached = (List<AuthorRankingResponseDto>) redisTemplate.opsForValue().get(AUTHOR_CACHE_KEY);
         if (cached != null) return cached;
@@ -109,13 +108,22 @@ public class LikeRankingService {
                     var tuple = topAuthorsList.get(i);
                     String authorName = (String) tuple.getValue();
                     int score = tuple.getScore() != null ? (int) Math.round(tuple.getScore()) : 0;
-                    int rank = i + 1;  // 0부터 시작하니까 +1 해서 랭킹 생성
+                    int rank = i + 1;
                     return new AuthorRankingResponseDto(rank, authorName, score);
                 })
                 .collect(Collectors.toList());
 
         redisTemplate.opsForValue().set(AUTHOR_CACHE_KEY, ranking, TTL);
         return ranking;
+    }
+
+    // 매일 자정 스케줄러가 호출할 랭킹 캐시 갱신 메서드
+    @Transactional
+    public void refreshRankingCaches() {
+        // 책 랭킹 캐시 갱신
+        getTop10BooksWithTitle();
+        // 작가 랭킹 캐시 갱신
+        getTop10Authors();
     }
 
 }

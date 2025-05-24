@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BookRankingResponseDto {
-    private String title;
-    private int score;
+    private final Integer rank;
+    private final String title;
+    private final int score;
 }

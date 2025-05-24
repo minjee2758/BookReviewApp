@@ -24,22 +24,30 @@ public class LikeLockAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String key = resolveKey(signature, joinPoint.getArgs(), likeLock.key());
 
-        boolean locked = redisLockService.lock(key);
-        if (!locked) throw new ApiException(ErrorStatus.TOO_MANY_REQUESTS);
+        String lockId = redisLockService.lock(key);
+        if (lockId == null) {
+            throw new ApiException(ErrorStatus.TOO_MANY_REQUESTS); // 락 실패 시 429 에러
+        }
 
         try {
             return joinPoint.proceed();
         } finally {
-            redisLockService.unlock(key);
+            redisLockService.unlock(key, lockId);
         }
     }
 
     private String resolveKey(MethodSignature signature, Object[] args, String spelKey) {
         EvaluationContext context = new StandardEvaluationContext();
         String[] paramNames = signature.getParameterNames();
+
+        if (paramNames == null) {
+            throw new IllegalStateException("Could not resolve method parameter names. Please ensure '-parameters' compiler flag is set.");
+        }
+
         for (int i = 0; i < args.length; i++) {
             context.setVariable(paramNames[i], args[i]);
         }
+
         ExpressionParser parser = new SpelExpressionParser();
         return parser.parseExpression(spelKey).getValue(context, String.class);
     }

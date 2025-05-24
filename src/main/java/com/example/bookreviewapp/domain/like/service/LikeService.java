@@ -32,7 +32,7 @@ public class LikeService {
     private final BookRepository bookRepository;
     private final LikeRankingService likeRankingService;
 
-    @LikeLock(key = "#userId + ':' + #requestDto.id")
+
     public void saveLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
@@ -69,7 +69,7 @@ public class LikeService {
         );
     }
 
-    @LikeLock(key = "#userId + ':' + #requestDto.id")
+
     public void deleteLike(Long userId, LikeRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
