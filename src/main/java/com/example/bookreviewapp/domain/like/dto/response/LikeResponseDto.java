@@ -1,13 +1,12 @@
 package com.example.bookreviewapp.domain.like.dto.response;
 
+import java.time.LocalTime;
+
 import com.example.bookreviewapp.domain.like.entity.Like;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalTime;
 
 @Getter
 public class LikeResponseDto {
