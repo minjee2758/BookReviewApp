@@ -56,18 +56,17 @@ public class UserController {
 
     @GetMapping("/reviews")
     public ResponseEntity<ApiResponse<Page<ReviewResponseDto>>> getReview(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                          @RequestParam int page,
-                                                                          @RequestParam int size) {
-        Page<ReviewResponseDto> reviewResponse = reviewService.getReview(userDetails.getId(), page, size);
+                                                                          @PageableDefault Pageable pageable) {
+        Page<ReviewResponseDto> reviewResponse = reviewService.getReview(userDetails.getId(), pageable);
         return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, reviewResponse);
     }
 
-//    @GetMapping("/recommend")
-//    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> getRecommend(@AuthenticationPrincipal CustomUserDetails userDetails
-//                                                                            ,@PageableDefault Pageable pageable) {
-//        Page<BookResponseDto> response = viewHistoryService.getRecommend(userDetails.getId(), pageable);
-//
-//        return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, response);
-//    }
+    @GetMapping("/recommend")
+    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> getRecommend(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                           @PageableDefault Pageable pageable) {
+        Page<BookResponseDto> response = viewHistoryService.getRecommend(userDetails.getId(), pageable);
+
+        return ApiResponse.onSuccess(SuccessStatus.GET_RECOMMEND_SUCCESS, response);
+    }
 
 }

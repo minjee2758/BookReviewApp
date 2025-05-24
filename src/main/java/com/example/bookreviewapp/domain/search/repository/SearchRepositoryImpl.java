@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.search.repository;
 
+import static com.example.bookreviewapp.domain.review.entity.PinStatus.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,8 @@ import com.example.bookreviewapp.domain.book.entity.QBook;
 import com.example.bookreviewapp.domain.review.dto.ReviewResponseDto;
 import com.example.bookreviewapp.domain.review.entity.QReview;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -59,13 +63,23 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom{
 		QReview review = QReview.review;
 		QBook book = QBook.book;
 
+
+
+		NumberExpression<Integer> pinnedPriority = new CaseBuilder()
+			.when(review.isPinned.eq(PINNED)).then(0)
+			.otherwise(1);
+
 		List<ReviewResponseDto> content = queryFactory
 			.select(Projections.constructor(
 				ReviewResponseDto.class,
 				book.title,
 				review.user.email,
 				review.content,
-				review.score
+				review.score,
+				review.viewer,
+				review.createdAt,
+				review.updatedAt
+
 			))
 			.from(review)
 			.join(review.book, book)
@@ -73,7 +87,8 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom{
 				book.enrollStatus.eq(EnrollStatus.ACCEPT),
 				book.title.containsIgnoreCase(keyword)
 				.or(review.content.containsIgnoreCase(keyword)))
-			.orderBy(review.isPinned.asc(), review.createdAt.desc())
+			.orderBy(pinnedPriority.asc(),
+				review.createdAt.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();

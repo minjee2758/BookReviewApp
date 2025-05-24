@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class ViewHistoryService {
@@ -22,9 +24,9 @@ public class ViewHistoryService {
     public Page<BookResponseDto> getRecommend(Long userId, Pageable pageable) {
         String topCategory = redisUtil.getTopCategory(userId);
 
-        System.out.println(redisUtil.getTime(userId));
+        Set<Long> viewedBookIds = redisUtil.getViewedBookIds(userId);
 
-        return bookRepository.findBooksByCategory(topCategory, pageable)
+        return bookRepository.findBooksByCategory(topCategory, viewedBookIds, pageable)
                 .map(BookResponseDto::from);
     }
 
