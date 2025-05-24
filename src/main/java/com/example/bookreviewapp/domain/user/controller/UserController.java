@@ -62,12 +62,12 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, reviewResponse);
     }
 
-    @GetMapping("/recommend")
-    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> getRecommend(@AuthenticationPrincipal CustomUserDetails userDetails
-                                                                            ,@PageableDefault Pageable pageable) {
-        Page<BookResponseDto> response = viewHistoryService.getRecommend(userDetails.getId(), pageable);
-
-        return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, response);
-    }
+//    @GetMapping("/recommend")
+//    public ResponseEntity<ApiResponse<Page<BookResponseDto>>> getRecommend(@AuthenticationPrincipal CustomUserDetails userDetails
+//                                                                            ,@PageableDefault Pageable pageable) {
+//        Page<BookResponseDto> response = viewHistoryService.getRecommend(userDetails.getId(), pageable);
+//
+//        return ApiResponse.onSuccess(SuccessStatus.GET_REVIEW_SUCCESS, response);
+//    }
 
 }

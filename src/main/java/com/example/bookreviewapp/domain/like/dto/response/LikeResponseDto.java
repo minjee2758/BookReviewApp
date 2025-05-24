@@ -9,9 +9,9 @@ import java.time.LocalTime;
 @Getter
 @AllArgsConstructor
 public class LikeResponseDto {
-    private Long bookId;
-    private String title;
-    private LocalTime likedAt;
+    private final Long bookId;
+    private final String title;
+    private final LocalTime likedAt;
 
     public static LikeResponseDto fromLiketoDto(Like like) {
         return new LikeResponseDto(

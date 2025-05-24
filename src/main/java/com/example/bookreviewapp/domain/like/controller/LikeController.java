@@ -19,12 +19,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/likes")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/likes")
+    @PostMapping
     public ResponseEntity<ApiResponse<Void>> saveLike(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody LikeRequestDto requestDto
@@ -34,7 +34,7 @@ public class LikeController {
         return ApiResponse.onSuccess(SuccessStatus.CREATE_LIKE);
     }
 
-    @GetMapping("/likes")
+    @GetMapping
     public ResponseEntity<ApiResponse<List<UserLikesResponseDto>>> getUserLikes(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(name = "page",defaultValue = "1") int page,
@@ -53,7 +53,7 @@ public class LikeController {
         return ApiResponse.onSuccess(SuccessStatus.GET_INFO_LIKE, List.of(responseDto));
     }
 
-    @DeleteMapping("/likes")
+    @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> deleteLike(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody LikeRequestDto requestDto

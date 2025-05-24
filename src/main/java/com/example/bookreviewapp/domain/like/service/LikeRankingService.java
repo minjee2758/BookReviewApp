@@ -4,6 +4,7 @@ import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.like.dto.response.AuthorRankingResponseDto;
 import com.example.bookreviewapp.domain.like.dto.response.BookRankingResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -11,15 +12,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
 public class LikeRankingService {
 
+    //@Qualifier("redisTemplateForObject")여러개의 RedisTemplate 빈 중에서 정확히 어떤 것을 주입해야 하는지 지정해주는 어노테이션
+    @Qualifier("redisTemplateForObject")
     private final RedisTemplate<String, Object> redisTemplate;
     private final BookRepository bookRepository;
 
@@ -57,8 +62,6 @@ public class LikeRankingService {
         redisTemplate.delete(BOOK_CACHE_KEY);
         redisTemplate.delete(AUTHOR_CACHE_KEY);
     }
-
-    // 책 랭킹 Top 10 조회 (캐싱 적용)
     public List<BookRankingResponseDto> getTop10BooksWithTitle() {
         List<BookRankingResponseDto> cached = (List<BookRankingResponseDto>) redisTemplate.opsForValue().get(BOOK_CACHE_KEY);
         if (cached != null) return cached;
@@ -68,13 +71,17 @@ public class LikeRankingService {
 
         if (topBooks == null) return List.of();
 
-        List<BookRankingResponseDto> ranking = topBooks.stream()
-                .map(tuple -> {
+        // Set을 List로 변환하여 인덱스 사용 가능하게 만듦
+        List<ZSetOperations.TypedTuple<Object>> topBooksList = new ArrayList<>(topBooks);
+
+        List<BookRankingResponseDto> ranking = IntStream.range(0, topBooksList.size())
+                .mapToObj(i -> {
+                    ZSetOperations.TypedTuple<Object> tuple = topBooksList.get(i);
                     Long bookId = Long.parseLong((String) tuple.getValue());
                     int score = tuple.getScore() != null ? (int) Math.round(tuple.getScore()) : 0;
-
+                    int rank = i + 1;  // 랭킹은 1부터 시작
                     return bookRepository.findById(bookId)
-                            .map(book -> new BookRankingResponseDto(book.getTitle(), score))
+                            .map(book -> new BookRankingResponseDto(rank, book.getTitle(), score))
                             .orElse(null);
                 })
                 .filter(Objects::nonNull)
@@ -83,6 +90,7 @@ public class LikeRankingService {
         redisTemplate.opsForValue().set(BOOK_CACHE_KEY, ranking, TTL);
         return ranking;
     }
+
 
     // 작가 랭킹 Top 10 조회 (캐싱 적용)
     public List<AuthorRankingResponseDto> getTop10Authors() {
@@ -94,15 +102,20 @@ public class LikeRankingService {
 
         if (topAuthors == null) return List.of();
 
-        List<AuthorRankingResponseDto> ranking = topAuthors.stream()
-                .map(tuple -> {
+        List<ZSetOperations.TypedTuple<Object>> topAuthorsList = new ArrayList<>(topAuthors);
+
+        List<AuthorRankingResponseDto> ranking = IntStream.range(0, topAuthorsList.size())
+                .mapToObj(i -> {
+                    var tuple = topAuthorsList.get(i);
                     String authorName = (String) tuple.getValue();
                     int score = tuple.getScore() != null ? (int) Math.round(tuple.getScore()) : 0;
-                    return new AuthorRankingResponseDto(authorName, score);
+                    int rank = i + 1;  // 0부터 시작하니까 +1 해서 랭킹 생성
+                    return new AuthorRankingResponseDto(rank, authorName, score);
                 })
                 .collect(Collectors.toList());
 
         redisTemplate.opsForValue().set(AUTHOR_CACHE_KEY, ranking, TTL);
         return ranking;
     }
+
 }
