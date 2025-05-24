@@ -3,8 +3,8 @@ package com.example.bookreviewapp.domain.like.controller;
 import com.example.bookreviewapp.common.code.SuccessStatus;
 import com.example.bookreviewapp.common.response.ApiResponse;
 import com.example.bookreviewapp.common.security.CustomUserDetails;
-import com.example.bookreviewapp.domain.like.dto.LikeRequestDto;
-import com.example.bookreviewapp.domain.like.dto.UserLikesResponseDto;
+import com.example.bookreviewapp.domain.like.dto.request.LikeRequestDto;
+import com.example.bookreviewapp.domain.like.dto.response.UserLikesResponseDto;
 import com.example.bookreviewapp.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +19,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/likes")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/likes")
+    @PostMapping
     public ResponseEntity<ApiResponse<Void>> saveLike(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody LikeRequestDto requestDto
@@ -34,7 +34,7 @@ public class LikeController {
         return ApiResponse.onSuccess(SuccessStatus.CREATE_LIKE);
     }
 
-    @GetMapping("/likes")
+    @GetMapping
     public ResponseEntity<ApiResponse<List<UserLikesResponseDto>>> getUserLikes(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(name = "page",defaultValue = "1") int page,
@@ -50,10 +50,10 @@ public class LikeController {
         );
 
         UserLikesResponseDto responseDto = likeService.getUserLikes(userDetails.getId(), pageable);
-        return ApiResponse.onSuccess(SuccessStatus.GETINFO_LIKE, List.of(responseDto));
+        return ApiResponse.onSuccess(SuccessStatus.GET_INFO_LIKE, List.of(responseDto));
     }
 
-    @DeleteMapping("/likes")
+    @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> deleteLike(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody LikeRequestDto requestDto

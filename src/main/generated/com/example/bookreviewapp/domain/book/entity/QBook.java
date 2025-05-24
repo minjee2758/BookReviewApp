@@ -42,6 +42,8 @@ public class QBook extends EntityPathBase<Book> {
 
     public final com.example.bookreviewapp.domain.user.entity.QUser user;
 
+    public final NumberPath<Long> viewer = createNumber("viewer", Long.class);
+
     public QBook(String variable) {
         this(Book.class, forVariable(variable), INITS);
     }

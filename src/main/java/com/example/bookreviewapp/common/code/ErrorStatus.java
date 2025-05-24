@@ -23,6 +23,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	//like 에러 코드
 	LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "4001", "좋아요 정보를 찾을수 없습니다."),
 	LIKE_ALREADY_EXISTS(HttpStatus.CONFLICT, "4002", "이미 좋아요한 항목입니다."),
+    TOO_MANY_REQUESTS(HttpStatus.CONFLICT, "4100", "요청이 너무 빠르게 반복되었습니다. 잠시 후 다시 시도해주세요."),
 
 	//admin 에러코드
 	BOOK_ADD_REQUEST_ALREADY_ACCEPT(HttpStatus.BAD_REQUEST, "5001", "이미 승인된 요청입니다."),

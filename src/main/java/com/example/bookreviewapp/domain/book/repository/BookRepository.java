@@ -25,4 +25,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findTop10ByEnrollStatusOrderByViewerDesc(EnrollStatus enrollStatus);
 
+
 }

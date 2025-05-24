@@ -55,6 +55,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
+
+//likeaspect null오류관련
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-parameters']
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
+
