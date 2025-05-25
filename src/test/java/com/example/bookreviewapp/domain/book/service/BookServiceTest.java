@@ -1,5 +1,7 @@
 package com.example.bookreviewapp.domain.book.service;
 
+import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
+import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
 import com.example.bookreviewapp.domain.book.dto.response.BookViewedTop10ResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
@@ -7,6 +9,7 @@ import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
+import com.example.bookreviewapp.domain.user.entity.UserRole;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import com.example.bookreviewapp.domain.viewhistory.repository.ViewHistoryRepository;
 import com.example.bookreviewapp.common.redis.RedisUtil;
@@ -50,6 +53,30 @@ class BookServiceTest {
                 redisTemplate
         );
     }
+
+    @Test
+    void 도서_생성() {
+        // given
+        Long userId = 1L;
+        User user = new User("min@naver.com", "Aaaaa11*", UserRole.USER);
+        setField(user, "id", userId); // 리플렉션으로 ID 강제 설정
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        Book book = new Book(user, "제목1", "저자1", "액션");
+        setField(book, "id", 10L); // book id도 강제 설정
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
+
+        // when
+        BookResponseDto responseDto = bookService.createBook(userId, "제목1", "저자1", "액션");
+
+        // then
+        assertThat(responseDto.getTitle()).isEqualTo("제목1");
+        assertThat(responseDto.getAuthor()).isEqualTo("저자1");
+        assertThat(responseDto.getCategory()).isEqualTo("액션");
+    }
+
+
     @Test
     void 조회가_가장많은_top10() {
         // given
