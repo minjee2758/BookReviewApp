@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,6 @@ public class ReviewService {
 
 		Book book = bookRepository.findById(bookId).orElseThrow(
 			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND));
-
 		User user = userRepository.findById(userDetails.getId())
 			.orElseThrow(() -> new ApiException(ErrorStatus.USER_NOT_FOUND));
 
@@ -129,7 +127,11 @@ public class ReviewService {
 
 	//책 상태가 REJECT면 조회 거부
 	public void rejectReview(Long bookId) {
-		if (bookRepository.findById(bookId).get().getEnrollStatus().equals(EnrollStatus.REJECT)) {
+		Book book = bookRepository.findById(bookId).orElseThrow(
+			() -> new ApiException(ErrorStatus.BOOK_NOT_FOUND)
+		);
+
+		if (book.getEnrollStatus().equals(EnrollStatus.REJECT)) {
 			throw new ApiException(ErrorStatus.BOOK_ENROLLMENT_IS_REJECTED);
 		}
 	}
