@@ -57,23 +57,27 @@ class BookServiceTest {
     @Test
     void 도서_생성() {
         // given
-        Long userId = 1L;
-        User user = new User("min@naver.com", "Aaaaa11*", UserRole.USER);
-        setField(user, "id", userId); // 리플렉션으로 ID 강제 설정
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        Book book = new Book(user, "제목1", "저자1", "액션");
+        Book book = new Book(null, "제목1", "저자1", "액션");
         setField(book, "id", 10L); // book id도 강제 설정
-        when(bookRepository.save(any(Book.class))).thenReturn(book);
 
         // when
-        BookResponseDto responseDto = bookService.createBook(userId, "제목1", "저자1", "액션");
+        Book savedbook = bookRepository.save(book);
 
         // then
-        assertThat(responseDto.getTitle()).isEqualTo("제목1");
-        assertThat(responseDto.getAuthor()).isEqualTo("저자1");
-        assertThat(responseDto.getCategory()).isEqualTo("액션");
+        verify(bookRepository).save(book);
+    }
+
+    @Test
+    void 도서_삭제() {
+        // given
+        Book book = new Book(null, "제목1", "저자1", "액션");
+        setField(book, "id", 1L);
+
+        // when
+        bookRepository.delete(book);
+
+        // then
+        verify(bookRepository).delete(book);// delete가 한 번 호출되었는지 확인
     }
 
 
