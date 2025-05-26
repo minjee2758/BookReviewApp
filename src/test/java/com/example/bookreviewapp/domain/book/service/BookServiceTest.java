@@ -68,6 +68,22 @@ class BookServiceTest {
     }
 
     @Test
+    void 도서_수정() {
+        // given
+        Book book = new Book(null, "기존 제목", "기존 저자", "액션");
+        setField(book, "id", 1L);
+
+        // when
+        book.update("수정 제목", "수정 저자", "판타지");
+        bookRepository.save(book);
+
+        // then
+        assertThat(book.getTitle()).isEqualTo("수정 제목");
+        assertThat(book.getAuthor()).isEqualTo("수정 저자");
+        assertThat(book.getCategory()).isEqualTo("판타지");
+    }
+
+    @Test
     void 도서_삭제() {
         // given
         Book book = new Book(null, "제목1", "저자1", "액션");
@@ -112,7 +128,7 @@ class BookServiceTest {
         assertThat(result.get(1).getTitle()).isEqualTo("title2");
     }
 
-    // setter 가 없는 엔티티에 값을 강제로 주입
+    // setter 가 없는 엔티티에 값을 강제로 주입 ( 리플렉션 )
     public static void setField(Object target, String fieldName, Object value) {
         try {
             Field field = target.getClass().getDeclaredField(fieldName);
