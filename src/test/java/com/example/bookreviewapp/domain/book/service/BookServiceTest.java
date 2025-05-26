@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
@@ -61,10 +62,26 @@ class BookServiceTest {
         setField(book, "id", 10L); // book id도 강제 설정
 
         // when
-        Book savedbook = bookRepository.save(book);
+        bookRepository.save(book);
 
         // then
         verify(bookRepository).save(book);
+        assertThat(book.getTitle()).isEqualTo("제목1");
+        assertThat(book.getAuthor()).isEqualTo("저자1");
+        assertThat(book.getCategory()).isEqualTo("액션");
+    }
+
+    @Test
+    void 도서_목록조회() {
+        // given
+        Book book = new Book(null, "제목1", "저자1", "액션");
+        setField(book, "id", 1L);
+
+        // when
+        bookRepository.findAllByEnrollStatus(EnrollStatus.ACCEPT, Pageable.ofSize(10));
+
+        // then
+        verify(bookRepository).findAllByEnrollStatus(EnrollStatus.ACCEPT, Pageable.ofSize(10));
     }
 
     @Test
