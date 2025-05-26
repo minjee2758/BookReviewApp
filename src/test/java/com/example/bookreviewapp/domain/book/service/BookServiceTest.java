@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -77,11 +78,13 @@ class BookServiceTest {
         Book book = new Book(null, "제목1", "저자1", "액션");
         setField(book, "id", 1L);
 
+        Pageable pageable = PageRequest.of(0, 10);
+
         // when
-        bookRepository.findAllByEnrollStatus(EnrollStatus.ACCEPT, Pageable.ofSize(10));
+        bookRepository.findAllByEnrollStatus(EnrollStatus.ACCEPT, pageable);
 
         // then
-        verify(bookRepository).findAllByEnrollStatus(EnrollStatus.ACCEPT, Pageable.ofSize(10));
+        verify(bookRepository).findAllByEnrollStatus(EnrollStatus.ACCEPT, pageable);
     }
 
     @Test
