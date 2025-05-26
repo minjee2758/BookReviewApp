@@ -1,7 +1,6 @@
 package com.example.bookreviewapp.domain.book.service;
 
-import com.example.bookreviewapp.domain.book.dto.request.UpdateBookRequestDto;
-import com.example.bookreviewapp.domain.book.dto.response.BookResponseDto;
+import com.example.bookreviewapp.common.redis.RedisUtil;
 import com.example.bookreviewapp.domain.book.dto.response.BookViewedTop10ResponseDto;
 import com.example.bookreviewapp.domain.book.entity.Book;
 import com.example.bookreviewapp.domain.book.entity.EnrollStatus;
@@ -9,21 +8,22 @@ import com.example.bookreviewapp.domain.book.repository.BookRepository;
 import com.example.bookreviewapp.domain.like.repository.LikeRepository;
 import com.example.bookreviewapp.domain.review.repository.ReviewRepository;
 import com.example.bookreviewapp.domain.user.entity.User;
-import com.example.bookreviewapp.domain.user.entity.UserRole;
 import com.example.bookreviewapp.domain.user.repository.UserRepository;
 import com.example.bookreviewapp.domain.viewhistory.repository.ViewHistoryRepository;
-import com.example.bookreviewapp.common.redis.RedisUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
