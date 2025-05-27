@@ -118,6 +118,7 @@ public class ReviewServiceTest {
 		verify(reviewRepository).save(review);
 	}
 
+	//(2) 등록 안된 책을 수정하려고 할때
 	@Test
 	void 존재하지_않는_책의_리뷰_수정_실패() {
 		// given
