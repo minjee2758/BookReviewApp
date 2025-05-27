@@ -122,7 +122,7 @@ public class ReviewServiceTest {
 	@Test
 	void 존재하지_않는_책의_리뷰_수정_실패() {
 		// given
-		Long bookId = 999L;
+		Long bookId = 9L;
 		Long reviewId = 1L;
 		Long userId = 1L;
 
