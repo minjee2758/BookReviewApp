@@ -27,7 +27,8 @@
 
 책읽아웃 프로젝트의 데이터베이스 구조는 다음과 같습니다:
 
-![ERD](https://img.notionusercontent.com/s3/prod-files-secure%2F83c75a39-3aba-4ba4-a792-7aefe4b07895%2F9b08add2-6941-4705-a3a8-c06f176bc090%2Fimage.png/size/w=1420?exp=1748161929&sig=tukoDT2PkQ8jnsZ6za-7kUqDHCMSgyFLu4S57LsH9GI&id=1f82dc3e-f514-8040-8151-c95de5c46587&table=block)
+<img width="1120" height="674" alt="ERD(책읽아웃)" src="https://github.com/user-attachments/assets/6f07832a-cda8-41a7-a87d-bd38367b6a9e" />
+
 
 ---
 
