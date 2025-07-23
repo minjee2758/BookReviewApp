@@ -62,5 +62,6 @@
 | 캐시       | Redis                            |
 | 빌드 도구  | Gradle                           |
 | API 테스트 | Postman                          |
+| 배포 도구 | Docker                            |
 
 ---
